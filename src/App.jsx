@@ -354,24 +354,80 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
       <PageHeader title="Painel Administrativo" subtitle="Edite números e tarefas do sistema" />
 
       <section className="admin">
-        <h2>Indicadores</h2>
+        <div className="admin-block">
+          <h2>Instagram</h2>
 
-        <Field label="Seguidores Instagram" value={data.instagram.seguidores} onChange={v => update('instagram.seguidores', v)} />
-        <Field label="Meta Instagram" value={data.instagram.meta} onChange={v => update('instagram.meta', v)} />
-        <Field label="Engajamento Instagram" value={data.instagram.engajamento} onChange={v => update('instagram.engajamento', v)} />
+          <Field
+            label="Seguidores Instagram"
+            value={data.instagram.seguidores}
+            onChange={v => update('instagram.seguidores', v)}
+          />
 
-        <Field label="Visualizações TikTok" value={data.tiktok.visualizacoes} onChange={v => update('tiktok.visualizacoes', v)} />
-        <Field label="Meta TikTok" value={data.tiktok.meta} onChange={v => update('tiktok.meta', v)} />
+          <Field
+            label="Meta Instagram"
+            value={data.instagram.meta}
+            onChange={v => update('instagram.meta', v)}
+          />
 
-        <Field label="Inscritos YouTube" value={data.youtube.inscritos} onChange={v => update('youtube.inscritos', v)} />
-        <Field label="Meta YouTube" value={data.youtube.meta} onChange={v => update('youtube.meta', v)} />
+          <Field
+            label="Engajamento Instagram"
+            value={data.instagram.engajamento}
+            onChange={v => update('instagram.engajamento', v)}
+          />
+        </div>
 
-        <Field label="Conversões WhatsApp" value={data.whatsapp.conversoes} onChange={v => update('whatsapp.conversoes', v)} />
-        <Field label="Meta WhatsApp" value={data.whatsapp.meta} onChange={v => update('whatsapp.meta', v)} />
+        <div className="admin-block">
+          <h2>TikTok</h2>
+
+          <Field
+            label="Visualizações TikTok"
+            value={data.tiktok.visualizacoes}
+            onChange={v => update('tiktok.visualizacoes', v)}
+          />
+
+          <Field
+            label="Meta TikTok"
+            value={data.tiktok.meta}
+            onChange={v => update('tiktok.meta', v)}
+          />
+        </div>
+
+        <div className="admin-block">
+          <h2>YouTube</h2>
+
+          <Field
+            label="Inscritos YouTube"
+            value={data.youtube.inscritos}
+            onChange={v => update('youtube.inscritos', v)}
+          />
+
+          <Field
+            label="Meta YouTube"
+            value={data.youtube.meta}
+            onChange={v => update('youtube.meta', v)}
+          />
+        </div>
+
+        <div className="admin-block">
+          <h2>WhatsApp</h2>
+
+          <Field
+            label="Conversões WhatsApp"
+            value={data.whatsapp.conversoes}
+            onChange={v => update('whatsapp.conversoes', v)}
+          />
+
+          <Field
+            label="Meta WhatsApp"
+            value={data.whatsapp.meta}
+            onChange={v => update('whatsapp.meta', v)}
+          />
+        </div>
 
         <div className="admin-block">
           <div className="admin-block-header">
             <h2>Planner</h2>
+
             <button className="small-action" onClick={addPlannerItem}>
               + Nova tarefa
             </button>

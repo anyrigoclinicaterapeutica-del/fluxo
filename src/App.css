@@ -492,4 +492,53 @@ input {
   .status {
     justify-self: start;
   }
+}.admin-block h2 {
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-block {
+  background: #fbfaff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.admin .field {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin .field:last-child {
+  border-bottom: none;
+}
+
+.admin .field span {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.admin .field input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 800;
+  color: var(--ink);
+  background: white;
+}
+
+@media (max-width: 900px) {
+  .admin .field {
+    grid-template-columns: 1fr;
+  }
 }
