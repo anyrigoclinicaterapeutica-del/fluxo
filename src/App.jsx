@@ -180,15 +180,43 @@ function PageHeader({ title, subtitle }) {
 }
 
 function Dashboard({ data }) {
+  const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+  const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
+  const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
+  const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
+
   return (
     <>
       <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
 
       <section className="grid">
-        <Card title="Instagram" value={data.instagram.seguidores.toLocaleString('pt-BR')} meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`} />
-        <Card title="TikTok" value={data.tiktok.visualizacoes.toLocaleString('pt-BR')} meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`} />
-        <Card title="YouTube" value={data.youtube.inscritos.toLocaleString('pt-BR')} meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`} />
-        <Card title="WhatsApp" value={data.whatsapp.conversoes} meta={`Meta: ${data.whatsapp.meta}`} />
+        <MetricCard
+          title="Instagram"
+          value={data.instagram.seguidores.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
+          percent={progressoInstagram}
+        />
+
+        <MetricCard
+          title="TikTok"
+          value={data.tiktok.visualizacoes.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`}
+          percent={progressoTikTok}
+        />
+
+        <MetricCard
+          title="YouTube"
+          value={data.youtube.inscritos.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`}
+          percent={progressoYouTube}
+        />
+
+        <MetricCard
+          title="WhatsApp"
+          value={data.whatsapp.conversoes}
+          meta={`Meta: ${data.whatsapp.meta}`}
+          percent={progressoWhatsApp}
+        />
       </section>
 
       <PlannerCard data={data} />
