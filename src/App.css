@@ -356,4 +356,41 @@ input {
 
 .sidebar .admin-btn.active {
   background: var(--grad-brand);
+}.metric-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric-head h2 {
+  margin: 0;
+}
+
+.metric-head span {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primary);
+  background: #f3e8ff;
+  padding: 5px 9px;
+  border-radius: 999px;
+}
+
+.progress {
+  margin-top: 16px;
+  height: 10px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  background: var(--grad-brand);
+  border-radius: 999px;
 }

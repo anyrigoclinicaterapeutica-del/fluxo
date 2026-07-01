@@ -206,49 +206,82 @@ function Planner({ data }) {
 }
 
 function Instagram({ data }) {
+  const progressoSeguidores = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+
   return (
     <>
       <PageHeader title="Instagram" subtitle="Métricas principais do Instagram" />
 
       <section className="grid">
-        <Card title="Seguidores" value={data.instagram.seguidores.toLocaleString('pt-BR')} meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`} />
-        <Card title="Engajamento" value={`${data.instagram.engajamento}%`} meta="Taxa atual" />
+        <MetricCard
+          title="Seguidores"
+          value={data.instagram.seguidores.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
+          percent={progressoSeguidores}
+        />
+
+        <Card
+          title="Engajamento"
+          value={`${data.instagram.engajamento}%`}
+          meta="Taxa atual"
+        />
       </section>
     </>
   )
 }
 
 function TikTok({ data }) {
+  const progressoViews = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
+
   return (
     <>
-      <PageHeader title="TikTok" subtitle="Métricas principais do TikTok" />
+      <PageHeader title="TikTok" subtitle="Visualizações e metas de crescimento" />
 
       <section className="grid">
-        <Card title="Visualizações" value={data.tiktok.visualizacoes.toLocaleString('pt-BR')} meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`} />
+        <MetricCard
+          title="Visualizações"
+          value={data.tiktok.visualizacoes.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`}
+          percent={progressoViews}
+        />
       </section>
     </>
   )
 }
 
 function YouTube({ data }) {
+  const progressoInscritos = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
+
   return (
     <>
-      <PageHeader title="YouTube" subtitle="Métricas principais do YouTube" />
+      <PageHeader title="YouTube" subtitle="Crescimento do canal e meta de inscritos" />
 
       <section className="grid">
-        <Card title="Inscritos" value={data.youtube.inscritos.toLocaleString('pt-BR')} meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`} />
+        <MetricCard
+          title="Inscritos"
+          value={data.youtube.inscritos.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`}
+          percent={progressoInscritos}
+        />
       </section>
     </>
   )
 }
 
 function WhatsApp({ data }) {
+  const progressoConversoes = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
+
   return (
     <>
       <PageHeader title="WhatsApp" subtitle="Conversões e metas do atendimento" />
 
       <section className="grid">
-        <Card title="Conversões" value={data.whatsapp.conversoes} meta={`Meta: ${data.whatsapp.meta}`} />
+        <MetricCard
+          title="Conversões"
+          value={data.whatsapp.conversoes}
+          meta={`Meta: ${data.whatsapp.meta}`}
+          percent={progressoConversoes}
+        />
       </section>
     </>
   )
@@ -375,7 +408,28 @@ function PlannerCard({ data }) {
     </section>
   )
 }
+function calcularProgresso(atual, meta) {
+  if (!meta || meta === 0) return 0
+  return Math.min(100, Math.round((Number(atual) / Number(meta)) * 100))
+}
 
+function MetricCard({ title, value, meta, percent }) {
+  return (
+    <div className="card metric-card">
+      <div className="metric-head">
+        <h2>{title}</h2>
+        <span>{percent}%</span>
+      </div>
+
+      <div className="value">{value}</div>
+      <p>{meta}</p>
+
+      <div className="progress">
+        <div style={{ width: `${percent}%` }} />
+      </div>
+    </div>
+  )
+}
 function Card({ title, value, meta }) {
   return (
     <div className="card">
