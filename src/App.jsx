@@ -393,18 +393,37 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
     </>
   )
 }
-
+function statusClass(status) {
+  if (status === 'Concluído') return 'done'
+  if (status === 'Em andamento') return 'in-progress'
+  return 'pending'
+}
 function PlannerCard({ data }) {
   return (
-    <section className="card">
-      <h2>Planner</h2>
+    <section className="planner-section">
+      <div className="planner-title">
+        <h2>Planner</h2>
+        <p>Organização das tarefas e prioridades da equipe</p>
+      </div>
 
-      {data.planner.map((item, index) => (
-        <div className="task" key={index}>
-          <strong>{item.tarefa}</strong>
-          <span>{item.data} · {item.responsavel} · {item.status}</span>
-        </div>
-      ))}
+      <div className="planner-list">
+        {data.planner.map((item, index) => (
+          <div className="planner-item" key={index}>
+            <div className="planner-date">
+              <span>{item.data || 'Sem data'}</span>
+            </div>
+
+            <div className="planner-content">
+              <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+              <p>Responsável: {item.responsavel || 'Não definido'}</p>
+            </div>
+
+            <span className={`status ${statusClass(item.status)}`}>
+              {item.status || 'Pendente'}
+            </span>
+          </div>
+        ))}
+      </div>
     </section>
   )
 }
