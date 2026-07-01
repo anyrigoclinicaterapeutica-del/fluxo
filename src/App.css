@@ -342,4 +342,18 @@ input {
   .planner-admin-row {
     grid-template-columns: 1fr;
   }
+}.sidebar button.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.sidebar .admin-btn {
+  margin-top: 16px;
+  background: var(--grad-brand);
+  color: white;
+  box-shadow: 0 8px 20px -8px rgba(236, 72, 153, 0.7);
+}
+
+.sidebar .admin-btn.active {
+  background: var(--grad-brand);
 }
