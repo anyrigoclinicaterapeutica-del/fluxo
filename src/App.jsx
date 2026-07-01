@@ -17,6 +17,8 @@ function App() {
   const [data, setData] = useState(initialData)
   const [page, setPage] = useState('dashboard')
   const [loading, setLoading] = useState(true)
+  const [adminUnlocked, setAdminUnlocked] = useState(false)
+  const [adminPassword, setAdminPassword] = useState('')
 
   async function carregar() {
     const { data: registro } = await supabase
@@ -91,6 +93,14 @@ function App() {
     setData(novo)
   }
 
+  function entrarAdmin() {
+    if (adminPassword === 'fluxo2026') {
+      setAdminUnlocked(true)
+    } else {
+      alert('Senha incorreta')
+    }
+  }
+
   if (loading) {
     return <div className="loading">Carregando Fluxo...</div>
   }
@@ -137,7 +147,15 @@ function App() {
         {page === 'youtube' && <YouTube data={data} />}
         {page === 'whatsapp' && <WhatsApp data={data} />}
 
-        {page === 'admin' && (
+        {page === 'admin' && !adminUnlocked && (
+          <AdminLogin
+            password={adminPassword}
+            setPassword={setAdminPassword}
+            onLogin={entrarAdmin}
+          />
+        )}
+
+        {page === 'admin' && adminUnlocked && (
           <Admin
             data={data}
             update={update}
@@ -236,6 +254,40 @@ function WhatsApp({ data }) {
   )
 }
 
+function AdminLogin({ password, setPassword, onLogin }) {
+  return (
+    <>
+      <PageHeader
+        title="Área Administrativa"
+        subtitle="Digite a senha para editar os dados do sistema"
+      />
+
+      <section className="admin login-box">
+        <h2>Acesso restrito</h2>
+
+        <label className="field">
+          <span>Senha do administrador</span>
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Digite a senha"
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                onLogin()
+              }
+            }}
+          />
+        </label>
+
+        <button className="save" onClick={onLogin}>
+          Entrar no Admin
+        </button>
+      </section>
+    </>
+  )
+}
+
 function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlannerItem }) {
   return (
     <>
@@ -301,7 +353,9 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
           ))}
         </div>
 
-        <button className="save" onClick={salvar}>Salvar alterações</button>
+        <button className="save" onClick={salvar}>
+          Salvar alterações
+        </button>
       </section>
     </>
   )
