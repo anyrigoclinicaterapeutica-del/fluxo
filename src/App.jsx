@@ -420,7 +420,7 @@ const progressoMedio = Math.round(
 />
 
 <DailyFocus planner={data.planner || []} />
-
+<TeamOverview planner={data.planner || []} />
 <ObjectiveCard objetivo={data.objetivo} />
       <NoticeCard aviso={data.aviso} />
     <PlannerSummary data={data} />
@@ -457,6 +457,65 @@ const progressoMedio = Math.round(
 
       <PlannerCard data={data} />
     </>
+  )
+}function TeamOverview({ planner }) {
+  const pessoas = planner.reduce((acc, item) => {
+    const nome = item.responsavel?.trim() || 'Sem responsável'
+
+    if (!acc[nome]) {
+      acc[nome] = {
+        nome,
+        total: 0,
+        ativas: 0,
+        concluidas: 0
+      }
+    }
+
+    acc[nome].total += 1
+
+    if (item.status === 'Concluído') {
+      acc[nome].concluidas += 1
+    } else {
+      acc[nome].ativas += 1
+    }
+
+    return acc
+  }, {})
+
+  const lista = Object.values(pessoas)
+
+  return (
+    <section className="team-overview">
+      <div className="team-head">
+        <div>
+          <span>Equipe</span>
+          <h2>Responsáveis da operação</h2>
+        </div>
+
+        <strong>{lista.length} pessoa(s)</strong>
+      </div>
+
+      {lista.length === 0 ? (
+        <p className="empty-team">Nenhum responsável cadastrado no planner.</p>
+      ) : (
+        <div className="team-list">
+          {lista.map((pessoa, index) => (
+            <div className="team-person" key={index}>
+              <div className="avatar">
+                {pessoa.nome.charAt(0).toUpperCase()}
+              </div>
+
+              <div>
+                <strong>{pessoa.nome}</strong>
+                <p>{pessoa.total} tarefa(s) · {pessoa.concluidas} concluída(s)</p>
+              </div>
+
+              <span>{pessoa.ativas} ativa(s)</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   )
 }
 
