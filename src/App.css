@@ -605,4 +605,66 @@ input {
     flex-direction: column;
     align-items: flex-start;
   }
+}.topbar {
+  margin-bottom: 26px;
+}
+
+.topbar h1 {
+  font-size: clamp(34px, 4vw, 52px);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.topbar p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.grid {
+  gap: 20px;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -24px rgba(31, 24, 66, 0.45);
+}
+
+.metric-card {
+  min-height: 150px;
+}
+
+.metric-card .value {
+  margin-top: 10px;
+}
+
+.planner-section {
+  margin-top: 28px;
+}
+
+.sidebar {
+  box-shadow: 20px 0 50px -35px rgba(31, 24, 66, 0.7);
+}
+
+.sidebar button {
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar button:hover {
+  transform: translateX(3px);
+}
+
+.save,
+.small-action,
+.remove {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save:hover,
+.small-action:hover,
+.remove:hover {
+  transform: translateY(-2px);
 }
