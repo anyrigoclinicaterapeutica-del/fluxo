@@ -250,9 +250,9 @@ setHasUnsavedChanges(true)
           💬 WhatsApp
         </button>
 
-        <button className={page === 'admin' ? 'active admin-btn' : 'admin-btn'} onClick={() => setPage('admin')}>
-          🔐 Admin
-        </button>
+        <button className={page === 'admin' ? 'active' : ''} onClick={() => setPage('admin')}>
+  🔐 Admin
+</button>
       </aside>
 
       <main className="main">
@@ -337,6 +337,12 @@ function QuickActions({ setPage }) {
         <strong>Banco de Ideias</strong>
         <small>Conteúdos e campanhas</small>
       </button>
+
+<button onClick={() => setPage('tarefas-diarias')}>
+  <span>✅</span>
+  <strong>Tarefa Diária</strong>
+  <small>Atividades de hoje</small>
+</button>
 
       <button onClick={() => setPage('planner')}>
         <span>🗓️</span>

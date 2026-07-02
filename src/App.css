@@ -2677,4 +2677,8 @@ body {
 .task-status-card.pending,
 .daily-task-card.pending {
   border-color: rgba(239, 68, 68, 0.35);
+}/* Ajuste dos atalhos rápidos para aceitar mais cards */
+
+.quick-actions {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
