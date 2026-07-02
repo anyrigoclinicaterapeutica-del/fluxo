@@ -236,7 +236,13 @@ function removeIdea(index) {
       </aside>
 
       <main className="main">
-        {page === 'dashboard' && <Dashboard data={data} lastUpdated={lastUpdated} />}
+        {page === 'dashboard' && (
+  <Dashboard
+    data={data}
+    lastUpdated={lastUpdated}
+    setPage={setPage}
+  />
+)}
         {page === 'planner' && <Planner data={data} />}
         {page === 'instagram' && <Instagram data={data} />}
         {page === 'tiktok' && <TikTok data={data} />}
@@ -293,7 +299,37 @@ function LastUpdated({ value }) {
     </div>
   )
 }
-function Dashboard({ data, lastUpdated }) {
+
+function QuickActions({ setPage }) {
+  return (
+    <section className="quick-actions">
+      <button onClick={() => setPage('relatorios')}>
+        <span>📈</span>
+        <strong>Relatórios</strong>
+        <small>Ver resumo geral</small>
+      </button>
+
+      <button onClick={() => setPage('ideias')}>
+        <span>💡</span>
+        <strong>Banco de Ideias</strong>
+        <small>Conteúdos e campanhas</small>
+      </button>
+
+      <button onClick={() => setPage('planner')}>
+        <span>🗓️</span>
+        <strong>Planner</strong>
+        <small>Tarefas da equipe</small>
+      </button>
+
+      <button onClick={() => setPage('admin')}>
+        <span>🔐</span>
+        <strong>Admin</strong>
+        <small>Editar dados</small>
+      </button>
+    </section>
+  )
+}
+function Dashboard({ data, lastUpdated, setPage }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
@@ -304,7 +340,7 @@ function Dashboard({ data, lastUpdated }) {
       <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
 
 <LastUpdated value={lastUpdated} />
-
+<QuickActions setPage={setPage} />
 <ObjectiveCard objetivo={data.objetivo} />
       <NoticeCard aviso={data.aviso} />
     <PlannerSummary data={data} />
