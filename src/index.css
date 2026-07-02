@@ -152,4 +152,49 @@ code {
     flex-direction: column;
     align-items: flex-start;
   }
+}/* Melhorias do Planner dentro do Admin */
+
+.admin {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.planner-admin-row {
+  display: grid;
+  grid-template-columns: 130px minmax(320px, 2fr) 180px 170px 110px;
+  align-items: center;
+  gap: 12px;
+}
+
+.planner-admin-row input,
+.planner-admin-row select {
+  min-width: 0;
+  height: 42px;
+  font-size: 14px;
+}
+
+.planner-admin-row input:nth-child(2) {
+  width: 100%;
+}
+
+.planner-admin-row .remove,
+.planner-admin-row button {
+  height: 42px;
+  white-space: nowrap;
+}
+
+.admin-block {
+  overflow: visible;
+}
+
+@media (max-width: 1200px) {
+  .planner-admin-row {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-admin-row input,
+  .planner-admin-row select,
+  .planner-admin-row button {
+    width: 100%;
+  }
 }
