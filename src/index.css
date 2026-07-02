@@ -262,4 +262,21 @@ code {
 
 .admin:not(.login-box) > .save::before {
   content: "✓ ";
+}.last-updated {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+}
+
+.last-updated strong {
+  color: var(--ink);
 }
