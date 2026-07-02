@@ -698,4 +698,172 @@ input {
   .planner-admin-row button {
     width: 100%;
   }
+}.objective-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background: var(--grad-brand);
+  color: white;
+  border-radius: 24px;
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: 0 18px 40px -18px rgba(124, 58, 237, 0.7);
+}
+
+.objective-card .eyebrow {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.objective-card h2 {
+  margin: 0;
+  font-size: 28px;
+  color: white;
+}
+
+.objective-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.objective-info span {
+  background: rgba(255, 255, 255, 0.16);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.objective-card .status {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.notice-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.notice-card .eyebrow {
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.notice-card h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 22px;
+}
+
+.notice-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.notice-priority {
+  min-width: 180px;
+  background: #f3e8ff;
+  border-radius: 18px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.notice-priority span {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.notice-priority strong {
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.admin-session {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+}
+
+.admin-session strong {
+  display: block;
+  color: #9a3412;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.admin-session span {
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-session button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #fb923c;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-session button:hover {
+  transform: translateY(-2px);
+}
+
+.admin .field select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 800;
+  color: var(--ink);
+  background: white;
+}
+
+@media (max-width: 900px) {
+  .objective-card,
+  .notice-card,
+  .admin-session {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notice-priority {
+    width: 100%;
+    text-align: left;
+  }
 }

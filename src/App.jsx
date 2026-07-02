@@ -7,15 +7,33 @@ const initialData = {
   tiktok: { visualizacoes: 120000, meta: 200000 },
   youtube: { inscritos: 8600, meta: 10000 },
   whatsapp: { conversoes: 32, meta: 50 },
- objetivo: {
-  titulo: 'Faturar 50k/dia',
-  prazo: '31/07/2026',
-  responsavel: 'Equipe Comercial',
-  status: 'Em andamento'
-},
+
+  objetivo: {
+    titulo: 'Faturar 50k/dia',
+    prazo: '31/07/2026',
+    responsavel: 'Equipe Comercial',
+    status: 'Em andamento'
+  },
+
+  aviso: {
+    titulo: 'Aviso da semana',
+    texto: 'Foco total em conteúdos de conversão e acompanhamento das metas.',
+    prioridade: 'Campanha de julho'
+  },
+
   planner: [
-    { data: '01/07/2026', tarefa: 'Gravar reels da campanha de julho', responsavel: 'Marina', status: 'Em andamento' },
-    { data: '02/07/2026', tarefa: 'Editar vídeo institucional', responsavel: 'Diego', status: 'Pendente' }
+    {
+      data: '01/07/2026',
+      tarefa: 'Gravar reels da campanha de julho',
+      responsavel: 'Marina',
+      status: 'Em andamento'
+    },
+    {
+      data: '02/07/2026',
+      tarefa: 'Editar vídeo institucional',
+      responsavel: 'Diego',
+      status: 'Pendente'
+    }
   ]
 }
 
@@ -33,14 +51,19 @@ function App() {
       .eq('id', 'principal')
       .single()
 
-if (registro?.data) {
-  setData({
-    ...initialData,
-    ...registro.data,
-    objetivo: registro.data.objetivo || initialData.objetivo,
-    planner: registro.data.planner || initialData.planner
-  })
-} else {
+    if (registro?.data) {
+      setData({
+        ...initialData,
+        ...registro.data,
+        instagram: { ...initialData.instagram, ...registro.data.instagram },
+        tiktok: { ...initialData.tiktok, ...registro.data.tiktok },
+        youtube: { ...initialData.youtube, ...registro.data.youtube },
+        whatsapp: { ...initialData.whatsapp, ...registro.data.whatsapp },
+        objetivo: registro.data.objetivo || initialData.objetivo,
+        aviso: registro.data.aviso || initialData.aviso,
+        planner: registro.data.planner || initialData.planner
+      })
+    } else {
       await supabase.from('fluxo_state').insert({
         id: 'principal',
         data: initialData
@@ -56,7 +79,7 @@ if (registro?.data) {
       .upsert({
         id: 'principal',
         data,
-        updated_at: new Date()
+        updated_at: new Date().toISOString()
       })
 
     alert('Dados salvos com sucesso!')
@@ -72,6 +95,10 @@ if (registro?.data) {
     let atual = novo
 
     keys.slice(0, -1).forEach(k => {
+      if (!atual[k]) {
+        atual[k] = {}
+      }
+
       atual = atual[k]
     })
 
@@ -110,6 +137,12 @@ if (registro?.data) {
     } else {
       alert('Senha incorreta')
     }
+  }
+
+  function sairAdmin() {
+    setAdminUnlocked(false)
+    setAdminPassword('')
+    setPage('dashboard')
   }
 
   if (loading) {
@@ -174,6 +207,7 @@ if (registro?.data) {
             updatePlanner={updatePlanner}
             addPlannerItem={addPlannerItem}
             removePlannerItem={removePlannerItem}
+            onLogout={sairAdmin}
           />
         )}
       </main>
@@ -199,7 +233,11 @@ function Dashboard({ data }) {
   return (
     <>
       <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
-<ObjectiveCard objetivo={data.objetivo} />
+
+      <ObjectiveCard objetivo={data.objetivo} />
+
+      <NoticeCard aviso={data.aviso} />
+
       <section className="grid">
         <MetricCard
           title="Instagram"
@@ -234,6 +272,7 @@ function Dashboard({ data }) {
     </>
   )
 }
+
 function Planner({ data }) {
   return (
     <>
@@ -359,45 +398,79 @@ function AdminLogin({ password, setPassword, onLogin }) {
   )
 }
 
-function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlannerItem }) {
+function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlannerItem, onLogout }) {
   return (
     <>
       <PageHeader title="Painel Administrativo" subtitle="Edite números e tarefas do sistema" />
 
+      <div className="admin-session">
+        <div>
+          <strong>Admin desbloqueado</strong>
+          <span>Você está editando os dados do Fluxo</span>
+        </div>
+
+        <button onClick={onLogout}>
+          Sair do Admin
+        </button>
+      </div>
+
       <section className="admin">
         <div className="admin-block">
-  <h2>Objetivo principal</h2>
+          <h2>Objetivo principal</h2>
 
-  <Field
-    label="Título do objetivo"
-    value={data.objetivo?.titulo || ''}
-    onChange={v => update('objetivo.titulo', v)}
-  />
+          <Field
+            label="Título do objetivo"
+            value={data.objetivo?.titulo || ''}
+            onChange={v => update('objetivo.titulo', v)}
+          />
 
-  <Field
-    label="Prazo"
-    value={data.objetivo?.prazo || ''}
-    onChange={v => update('objetivo.prazo', v)}
-  />
+          <Field
+            label="Prazo"
+            value={data.objetivo?.prazo || ''}
+            onChange={v => update('objetivo.prazo', v)}
+          />
 
-  <Field
-    label="Responsável"
-    value={data.objetivo?.responsavel || ''}
-    onChange={v => update('objetivo.responsavel', v)}
-  />
+          <Field
+            label="Responsável"
+            value={data.objetivo?.responsavel || ''}
+            onChange={v => update('objetivo.responsavel', v)}
+          />
 
-  <label className="field">
-    <span>Status do objetivo</span>
-    <select
-      value={data.objetivo?.status || 'Pendente'}
-      onChange={e => update('objetivo.status', e.target.value)}
-    >
-      <option>Pendente</option>
-      <option>Em andamento</option>
-      <option>Concluído</option>
-    </select>
-  </label>
-</div>
+          <label className="field">
+            <span>Status do objetivo</span>
+            <select
+              value={data.objetivo?.status || 'Pendente'}
+              onChange={e => update('objetivo.status', e.target.value)}
+            >
+              <option>Pendente</option>
+              <option>Em andamento</option>
+              <option>Concluído</option>
+            </select>
+          </label>
+        </div>
+
+        <div className="admin-block">
+          <h2>Aviso da semana</h2>
+
+          <Field
+            label="Título do aviso"
+            value={data.aviso?.titulo || ''}
+            onChange={v => update('aviso.titulo', v)}
+          />
+
+          <Field
+            label="Texto do aviso"
+            value={data.aviso?.texto || ''}
+            onChange={v => update('aviso.texto', v)}
+          />
+
+          <Field
+            label="Prioridade"
+            value={data.aviso?.prioridade || ''}
+            onChange={v => update('aviso.prioridade', v)}
+          />
+        </div>
+
         <div className="admin-block">
           <h2>Instagram</h2>
 
@@ -519,7 +592,26 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
       </section>
     </>
   )
-}function ObjectiveCard({ objetivo }) {
+}
+
+function NoticeCard({ aviso }) {
+  return (
+    <section className="notice-card">
+      <div>
+        <span className="eyebrow">Comunicado interno</span>
+        <h2>{aviso?.titulo || 'Aviso da semana'}</h2>
+        <p>{aviso?.texto || 'Nenhum aviso cadastrado.'}</p>
+      </div>
+
+      <div className="notice-priority">
+        <span>Prioridade</span>
+        <strong>{aviso?.prioridade || 'Não definida'}</strong>
+      </div>
+    </section>
+  )
+}
+
+function ObjectiveCard({ objetivo }) {
   return (
     <section className="objective-card">
       <div>
@@ -538,11 +630,13 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
     </section>
   )
 }
+
 function statusClass(status) {
   if (status === 'Concluído') return 'done'
   if (status === 'Em andamento') return 'in-progress'
   return 'pending'
 }
+
 function PlannerCard({ data }) {
   return (
     <section className="planner-section">
@@ -572,6 +666,7 @@ function PlannerCard({ data }) {
     </section>
   )
 }
+
 function calcularProgresso(atual, meta) {
   if (!meta || meta === 0) return 0
   return Math.min(100, Math.round((Number(atual) / Number(meta)) * 100))
@@ -594,6 +689,7 @@ function MetricCard({ title, value, meta, percent }) {
     </div>
   )
 }
+
 function Card({ title, value, meta }) {
   return (
     <div className="card">
