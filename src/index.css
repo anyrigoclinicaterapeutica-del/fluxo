@@ -108,4 +108,48 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}.admin-session {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+}
+
+.admin-session strong {
+  display: block;
+  color: #9a3412;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+
+.admin-session span {
+  color: #9a3412;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-session button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #fb923c;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-session button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .admin-session {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
