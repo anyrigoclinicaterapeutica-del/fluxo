@@ -7,6 +7,12 @@ const initialData = {
   tiktok: { visualizacoes: 120000, meta: 200000 },
   youtube: { inscritos: 8600, meta: 10000 },
   whatsapp: { conversoes: 32, meta: 50 },
+ objetivo: {
+  titulo: 'Faturar 50k/dia',
+  prazo: '31/07/2026',
+  responsavel: 'Equipe Comercial',
+  status: 'Em andamento'
+},
   planner: [
     { data: '01/07/2026', tarefa: 'Gravar reels da campanha de julho', responsavel: 'Marina', status: 'Em andamento' },
     { data: '02/07/2026', tarefa: 'Editar vídeo institucional', responsavel: 'Diego', status: 'Pendente' }
@@ -27,9 +33,14 @@ function App() {
       .eq('id', 'principal')
       .single()
 
-    if (registro?.data) {
-      setData(registro.data)
-    } else {
+if (registro?.data) {
+  setData({
+    ...initialData,
+    ...registro.data,
+    objetivo: registro.data.objetivo || initialData.objetivo,
+    planner: registro.data.planner || initialData.planner
+  })
+} else {
       await supabase.from('fluxo_state').insert({
         id: 'principal',
         data: initialData
@@ -188,7 +199,7 @@ function Dashboard({ data }) {
   return (
     <>
       <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
-
+<ObjectiveCard objetivo={data.objetivo} />
       <section className="grid">
         <MetricCard
           title="Instagram"
@@ -355,6 +366,39 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
 
       <section className="admin">
         <div className="admin-block">
+  <h2>Objetivo principal</h2>
+
+  <Field
+    label="Título do objetivo"
+    value={data.objetivo?.titulo || ''}
+    onChange={v => update('objetivo.titulo', v)}
+  />
+
+  <Field
+    label="Prazo"
+    value={data.objetivo?.prazo || ''}
+    onChange={v => update('objetivo.prazo', v)}
+  />
+
+  <Field
+    label="Responsável"
+    value={data.objetivo?.responsavel || ''}
+    onChange={v => update('objetivo.responsavel', v)}
+  />
+
+  <label className="field">
+    <span>Status do objetivo</span>
+    <select
+      value={data.objetivo?.status || 'Pendente'}
+      onChange={e => update('objetivo.status', e.target.value)}
+    >
+      <option>Pendente</option>
+      <option>Em andamento</option>
+      <option>Concluído</option>
+    </select>
+  </label>
+</div>
+        <div className="admin-block">
           <h2>Instagram</h2>
 
           <Field
@@ -474,6 +518,24 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
         </button>
       </section>
     </>
+  )
+}function ObjectiveCard({ objetivo }) {
+  return (
+    <section className="objective-card">
+      <div>
+        <span className="eyebrow">Objetivo principal</span>
+        <h2>{objetivo?.titulo || 'Sem objetivo definido'}</h2>
+
+        <div className="objective-info">
+          <span>Prazo: {objetivo?.prazo || 'Sem prazo'}</span>
+          <span>Responsável: {objetivo?.responsavel || 'Não definido'}</span>
+        </div>
+      </div>
+
+      <span className={`status ${statusClass(objetivo?.status)}`}>
+        {objetivo?.status || 'Pendente'}
+      </span>
+    </section>
   )
 }
 function statusClass(status) {
