@@ -433,7 +433,25 @@ function WhatsApp({ data }) {
       </section>
     </>
   )
-}function Relatorios({ data }) {
+}
+
+function ReportRow({ name, percent }) {
+  return (
+    <div className="report-row">
+      <div className="report-channel">
+        <span>{name}</span>
+
+        <div className="report-bar">
+          <div style={{ width: `${percent}%` }} />
+        </div>
+      </div>
+
+      <strong>{percent}%</strong>
+    </div>
+  )
+}
+
+function Relatorios({ data }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
@@ -476,25 +494,10 @@ function WhatsApp({ data }) {
       <section className="report-table">
         <h2>Desempenho por canal</h2>
 
-        <div className="report-row">
-          <span>Instagram</span>
-          <strong>{progressoInstagram}%</strong>
-        </div>
-
-        <div className="report-row">
-          <span>TikTok</span>
-          <strong>{progressoTikTok}%</strong>
-        </div>
-
-        <div className="report-row">
-          <span>YouTube</span>
-          <strong>{progressoYouTube}%</strong>
-        </div>
-
-        <div className="report-row">
-          <span>WhatsApp</span>
-          <strong>{progressoWhatsApp}%</strong>
-        </div>
+        <ReportRow name="Instagram" percent={progressoInstagram} />
+        <ReportRow name="TikTok" percent={progressoTikTok} />
+        <ReportRow name="YouTube" percent={progressoYouTube} />
+        <ReportRow name="WhatsApp" percent={progressoWhatsApp} />
       </section>
     </>
   )

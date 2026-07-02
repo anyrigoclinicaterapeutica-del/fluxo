@@ -1469,4 +1469,50 @@ textarea {
   .report-grid {
     grid-template-columns: 1fr;
   }
+}/* Barras visuais dos Relatórios */
+
+.report-row {
+  grid-template-columns: 1fr 90px;
+  gap: 20px;
+}
+
+.report-channel {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.report-channel span {
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.report-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.report-bar div {
+  height: 100%;
+  background: var(--grad-brand);
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(236, 72, 153, 0.45);
+}
+
+@media (max-width: 700px) {
+  .report-row {
+    grid-template-columns: 1fr;
+  }
+
+  .report-row strong {
+    justify-self: start;
+  }
+
+  .report-channel {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }
