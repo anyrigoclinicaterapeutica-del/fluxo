@@ -766,8 +766,8 @@ function Relatorios({ data }) {
   const melhorCanal = canais.reduce((melhor, atual) => {
     return atual.progresso > melhor.progresso ? atual : melhor
   }, canais[0])
-async function copiarResumo() {
-  const resumo = `
+function gerarResumo() {
+  return `
 📊 Resumo do Fluxo
 
 🚀 Melhor canal: ${melhorCanal.nome} com ${melhorCanal.progresso}%
@@ -784,9 +784,16 @@ async function copiarResumo() {
 
 Status geral: acompanhar prioridades e manter foco nas metas.
 `.trim()
+}
 
-  await navigator.clipboard.writeText(resumo)
+async function copiarResumo() {
+  await navigator.clipboard.writeText(gerarResumo())
   alert('Resumo copiado com sucesso!')
+}
+
+function abrirWhatsApp() {
+  const texto = encodeURIComponent(gerarResumo())
+  window.open(`https://wa.me/?text=${texto}`, '_blank')
 }
   return (
     <>
@@ -796,7 +803,11 @@ Status geral: acompanhar prioridades e manter foco nas metas.
       />
 <section className="report-actions">
   <button onClick={copiarResumo}>
-    Copiar resumo para WhatsApp
+    Copiar resumo
+  </button>
+
+  <button onClick={abrirWhatsApp}>
+    Abrir no WhatsApp
   </button>
 </section>
       <section className="report-grid">

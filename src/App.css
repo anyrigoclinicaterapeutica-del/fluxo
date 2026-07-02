@@ -2466,4 +2466,19 @@ body {
   .report-actions button {
     width: 100%;
   }
+}/* Ajuste dos botões de ação dos Relatórios */
+
+.report-actions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.report-actions button {
+  min-width: 170px;
+}
+
+@media (max-width: 700px) {
+  .report-actions button {
+    min-width: 0;
+  }
 }
