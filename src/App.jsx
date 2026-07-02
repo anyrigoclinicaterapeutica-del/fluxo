@@ -713,25 +713,58 @@ function Relatorios({ data }) {
   )
 }
 function BancoIdeias({ data }) {
+  const [filtro, setFiltro] = useState('Todos')
   const ideias = data?.ideias || []
+
+  const ideiasFiltradas =
+    filtro === 'Todos'
+      ? ideias
+      : ideias.filter(item => item.status === filtro)
+
+  const filtros = [
+    { nome: 'Todos', total: ideias.length },
+    { nome: 'Ideia', total: ideias.filter(item => item.status === 'Ideia').length },
+    { nome: 'Em análise', total: ideias.filter(item => item.status === 'Em análise').length },
+    { nome: 'Aprovada', total: ideias.filter(item => item.status === 'Aprovada').length },
+    { nome: 'Executada', total: ideias.filter(item => item.status === 'Executada').length }
+  ]
 
   return (
     <>
       <PageHeader title="Banco de Ideias" subtitle="Ideias de conteúdos, campanhas e ações futuras" />
 
-      <section className="ideas-grid">
-        {ideias.map((item, index) => (
-          <div className="idea-card" key={index}>
-            <div className="idea-top">
-              <span>{item.categoria || 'Geral'}</span>
-              <strong>{item.status || 'Ideia'}</strong>
-            </div>
-
-            <h2>{item.titulo || 'Ideia sem título'}</h2>
-            <p>{item.descricao || 'Sem descrição cadastrada.'}</p>
-          </div>
+      <section className="ideas-filters">
+        {filtros.map(item => (
+          <button
+            key={item.nome}
+            className={filtro === item.nome ? 'active' : ''}
+            onClick={() => setFiltro(item.nome)}
+          >
+            {item.nome}
+            <span>{item.total}</span>
+          </button>
         ))}
       </section>
+
+      {ideiasFiltradas.length === 0 ? (
+        <section className="empty-state">
+          Nenhuma ideia encontrada para este filtro.
+        </section>
+      ) : (
+        <section className="ideas-grid">
+          {ideiasFiltradas.map((item, index) => (
+            <div className="idea-card" key={index}>
+              <div className="idea-top">
+                <span>{item.categoria || 'Geral'}</span>
+                <strong>{item.status || 'Ideia'}</strong>
+              </div>
+
+              <h2>{item.titulo || 'Ideia sem título'}</h2>
+              <p>{item.descricao || 'Sem descrição cadastrada.'}</p>
+            </div>
+          ))}
+        </section>
+      )}
     </>
   )
 }
