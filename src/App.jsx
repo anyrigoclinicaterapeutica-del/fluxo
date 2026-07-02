@@ -3,9 +3,9 @@ import { supabase } from './config/supabase'
 import './App.css'
 
 const initialData = {
-  instagram: { seguidores: 24500, meta: 30000, engajamento: 4.2 },
-  tiktok: { visualizacoes: 120000, meta: 200000 },
-  youtube: { inscritos: 8600, meta: 10000 },
+  instagram: { seguidores: 24500, seguidoresMesAnterior: 23000, meta: 30000, engajamento: 4.2 },
+  tiktok: { visualizacoes: 120000, meta: 200000, seguidores: 1200, seguidoresMesAnterior: 1000 },
+  youtube: { inscritos: 8600, inscritosMesAnterior: 8000, meta: 10000 },
   whatsapp: { conversoes: 32, meta: 50 },
 
   objetivo: {
@@ -667,6 +667,11 @@ function Planner({ data }) {
 function Instagram({ data }) {
   const progressoSeguidores = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
 
+  const crescimentoMensal = calcularCrescimentoMensal(
+    data.instagram.seguidores,
+    data.instagram.seguidoresMesAnterior
+  )
+
   return (
     <>
       <PageHeader title="Instagram" subtitle="Métricas principais do Instagram" />
@@ -677,6 +682,12 @@ function Instagram({ data }) {
           value={data.instagram.seguidores.toLocaleString('pt-BR')}
           meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
           percent={progressoSeguidores}
+        />
+
+        <Card
+          title="Crescimento mensal"
+          value={`${crescimentoMensal}%`}
+          meta={`Início do mês: ${(data.instagram.seguidoresMesAnterior || 0).toLocaleString('pt-BR')}`}
         />
 
         <Card
@@ -692,9 +703,14 @@ function Instagram({ data }) {
 function TikTok({ data }) {
   const progressoViews = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
 
+  const crescimentoMensal = calcularCrescimentoMensal(
+    data.tiktok.seguidores,
+    data.tiktok.seguidoresMesAnterior
+  )
+
   return (
     <>
-      <PageHeader title="TikTok" subtitle="Visualizações e metas de crescimento" />
+      <PageHeader title="TikTok" subtitle="Visualizações, seguidores e crescimento mensal" />
 
       <section className="grid">
         <MetricCard
@@ -702,6 +718,18 @@ function TikTok({ data }) {
           value={data.tiktok.visualizacoes.toLocaleString('pt-BR')}
           meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`}
           percent={progressoViews}
+        />
+
+        <Card
+          title="Seguidores"
+          value={(data.tiktok.seguidores || 0).toLocaleString('pt-BR')}
+          meta={`Início do mês: ${(data.tiktok.seguidoresMesAnterior || 0).toLocaleString('pt-BR')}`}
+        />
+
+        <Card
+          title="Crescimento mensal"
+          value={`${crescimentoMensal}%`}
+          meta="Baseado nos seguidores"
         />
       </section>
     </>
@@ -711,9 +739,14 @@ function TikTok({ data }) {
 function YouTube({ data }) {
   const progressoInscritos = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
 
+  const crescimentoMensal = calcularCrescimentoMensal(
+    data.youtube.inscritos,
+    data.youtube.inscritosMesAnterior
+  )
+
   return (
     <>
-      <PageHeader title="YouTube" subtitle="Crescimento do canal e meta de inscritos" />
+      <PageHeader title="YouTube" subtitle="Crescimento do canal, inscritos e meta mensal" />
 
       <section className="grid">
         <MetricCard
@@ -721,6 +754,12 @@ function YouTube({ data }) {
           value={data.youtube.inscritos.toLocaleString('pt-BR')}
           meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`}
           percent={progressoInscritos}
+        />
+
+        <Card
+          title="Crescimento mensal"
+          value={`${crescimentoMensal}%`}
+          meta={`Início do mês: ${(data.youtube.inscritosMesAnterior || 0).toLocaleString('pt-BR')}`}
         />
       </section>
     </>
@@ -1166,7 +1205,11 @@ function Admin({
             value={data.instagram.seguidores}
             onChange={v => update('instagram.seguidores', v)}
           />
-
+<Field
+  label="Seguidores no início do mês"
+  value={data.instagram.seguidoresMesAnterior || ''}
+  onChange={v => update('instagram.seguidoresMesAnterior', v)}
+/>
           <Field
             label="Meta Instagram"
             value={data.instagram.meta}
@@ -1195,7 +1238,17 @@ function Admin({
             onChange={v => update('tiktok.meta', v)}
           />
         </div>
+<Field
+  label="Seguidores TikTok"
+  value={data.tiktok.seguidores || ''}
+  onChange={v => update('tiktok.seguidores', v)}
+/>
 
+<Field
+  label="Seguidores TikTok no início do mês"
+  value={data.tiktok.seguidoresMesAnterior || ''}
+  onChange={v => update('tiktok.seguidoresMesAnterior', v)}
+/>
         <div className="admin-block">
           <h2>YouTube</h2>
 
@@ -1204,7 +1257,11 @@ function Admin({
             value={data.youtube.inscritos}
             onChange={v => update('youtube.inscritos', v)}
           />
-
+<Field
+  label="Inscritos no início do mês"
+  value={data.youtube.inscritosMesAnterior || ''}
+  onChange={v => update('youtube.inscritosMesAnterior', v)}
+/>
           <Field
             label="Meta YouTube"
             value={data.youtube.meta}
@@ -1618,7 +1675,14 @@ function calcularProgresso(atual, meta) {
   if (!meta || meta === 0) return 0
   return Math.min(100, Math.round((Number(atual) / Number(meta)) * 100))
 }
+function calcularCrescimentoMensal(atual, anterior) {
+  const numeroAtual = Number(atual) || 0
+  const numeroAnterior = Number(anterior) || 0
 
+  if (numeroAnterior <= 0) return 0
+
+  return Math.round(((numeroAtual - numeroAnterior) / numeroAnterior) * 100)
+}
 function MetricCard({ title, value, meta, percent }) {
   return (
     <div className="card metric-card">
