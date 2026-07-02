@@ -328,13 +328,43 @@ function QuickActions({ setPage }) {
       </button>
     </section>
   )
+}function ExecutiveSummary({ progressoMedio, totalTarefas, totalIdeias, statusObjetivo }) {
+  return (
+    <section className="executive-summary">
+      <div className="summary-card highlight">
+        <span>Progresso médio</span>
+        <strong>{progressoMedio}%</strong>
+        <p>Média geral dos canais</p>
+      </div>
+
+      <div className="summary-card">
+        <span>Tarefas</span>
+        <strong>{totalTarefas}</strong>
+        <p>Itens ativos no planner</p>
+      </div>
+
+      <div className="summary-card">
+        <span>Ideias</span>
+        <strong>{totalIdeias}</strong>
+        <p>Conteúdos e campanhas</p>
+      </div>
+
+      <div className="summary-card">
+        <span>Objetivo</span>
+        <strong>{statusObjetivo}</strong>
+        <p>Status principal atual</p>
+      </div>
+    </section>
+  )
 }
 function Dashboard({ data, lastUpdated, setPage }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
   const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
-
+const progressoMedio = Math.round(
+  (progressoInstagram + progressoTikTok + progressoYouTube + progressoWhatsApp) / 4
+)
   return (
     <>
       <header className="dashboard-hero">
@@ -345,6 +375,14 @@ function Dashboard({ data, lastUpdated, setPage }) {
 
 <LastUpdated value={lastUpdated} />
 <QuickActions setPage={setPage} />
+
+<ExecutiveSummary
+  progressoMedio={progressoMedio}
+  totalTarefas={data.planner?.length || 0}
+  totalIdeias={data.ideias?.length || 0}
+  statusObjetivo={data.objetivo?.status || 'Pendente'}
+/>
+
 <ObjectiveCard objetivo={data.objetivo} />
       <NoticeCard aviso={data.aviso} />
     <PlannerSummary data={data} />

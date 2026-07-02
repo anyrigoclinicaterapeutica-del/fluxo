@@ -1623,4 +1623,63 @@ textarea {
   .dashboard-hero {
     padding: 26px;
   }
+}/* Resumo executivo do Dashboard */
+
+.executive-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow);
+}
+
+.summary-card.highlight {
+  background:
+    radial-gradient(circle at top right, rgba(236, 72, 153, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+}
+
+.summary-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.summary-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  margin-bottom: 6px;
+}
+
+.summary-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 1000px) {
+  .executive-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .executive-summary {
+    grid-template-columns: 1fr;
+  }
 }
