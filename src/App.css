@@ -917,4 +917,55 @@ input {
   .planner-summary {
     grid-template-columns: 1fr;
   }
+}.planner-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-item {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.summary-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.summary-item strong {
+  color: var(--ink);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.summary-item.pending {
+  background: #fffbeb;
+}
+
+.summary-item.in-progress {
+  background: #eff6ff;
+}
+
+.summary-item.done {
+  background: #f0fdf4;
+}
+
+@media (max-width: 900px) {
+  .planner-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .planner-summary {
+    grid-template-columns: 1fr;
+  }
 }
