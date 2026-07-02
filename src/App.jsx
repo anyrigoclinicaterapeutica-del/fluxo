@@ -21,6 +21,21 @@ const initialData = {
     prioridade: 'Campanha de julho'
   },
 
+  ideias: [
+    {
+      titulo: 'Série de reels com bastidores',
+      descricao: 'Mostrar os bastidores da equipe, rotina e preparação dos conteúdos.',
+      categoria: 'Instagram',
+      status: 'Ideia'
+    },
+    {
+      titulo: 'Vídeo curto de transformação',
+      descricao: 'Criar antes e depois de resultado, processo ou campanha.',
+      categoria: 'TikTok',
+      status: 'Em análise'
+    }
+  ],
+
   planner: [
     {
       data: '01/07/2026',
@@ -41,6 +56,7 @@ function App() {
   const [data, setData] = useState(initialData)
   const [page, setPage] = useState('dashboard')
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState(null)
   const [adminUnlocked, setAdminUnlocked] = useState(false)
   const [adminPassword, setAdminPassword] = useState('')
 
@@ -51,19 +67,22 @@ function App() {
       .eq('id', 'principal')
       .single()
 
-    if (registro?.data) {
-      setData({
-        ...initialData,
-        ...registro.data,
-        instagram: { ...initialData.instagram, ...registro.data.instagram },
-        tiktok: { ...initialData.tiktok, ...registro.data.tiktok },
-        youtube: { ...initialData.youtube, ...registro.data.youtube },
-        whatsapp: { ...initialData.whatsapp, ...registro.data.whatsapp },
-        objetivo: registro.data.objetivo || initialData.objetivo,
-        aviso: registro.data.aviso || initialData.aviso,
-        planner: registro.data.planner || initialData.planner
-      })
-    } else {
+if (registro?.data) {
+  setData({
+    ...initialData,
+    ...registro.data,
+    instagram: { ...initialData.instagram, ...registro.data.instagram },
+    tiktok: { ...initialData.tiktok, ...registro.data.tiktok },
+    youtube: { ...initialData.youtube, ...registro.data.youtube },
+    whatsapp: { ...initialData.whatsapp, ...registro.data.whatsapp },
+    objetivo: registro.data.objetivo || initialData.objetivo,
+   aviso: registro.data.aviso || initialData.aviso,
+ideias: registro.data.ideias || initialData.ideias,
+planner: registro.data.planner || initialData.planner
+  })
+
+  setLastUpdated(registro.updated_at)
+} else {
       await supabase.from('fluxo_state').insert({
         id: 'principal',
         data: initialData
@@ -73,19 +92,22 @@ function App() {
     setLoading(false)
   }
 
-  async function salvar() {
-    await supabase
-      .from('fluxo_state')
-      .upsert({
-        id: 'principal',
-        data,
-        updated_at: new Date().toISOString()
-      })
+async function salvar() {
+  const agora = new Date().toISOString()
 
-    alert('Dados salvos com sucesso!')
-  }
+  await supabase
+    .from('fluxo_state')
+    .upsert({
+      id: 'principal',
+      data,
+      updated_at: agora
+    })
 
-  useEffect(() => {
+   setLastUpdated(agora)
+  alert('Dados salvos com sucesso!')
+}
+
+useEffect(() => {
     carregar()
   }, [])
 
@@ -125,11 +147,36 @@ function App() {
     setData(novo)
   }
 
-  function removePlannerItem(index) {
-    const novo = structuredClone(data)
-    novo.planner.splice(index, 1)
-    setData(novo)
-  }
+function removePlannerItem(index) {
+  const novo = structuredClone(data)
+  novo.planner.splice(index, 1)
+  setData(novo)
+}
+
+function updateIdea(index, field, value) {
+  const novo = structuredClone(data)
+  novo.ideias[index][field] = value
+  setData(novo)
+}
+
+function addIdea() {
+  const novo = structuredClone(data)
+
+  novo.ideias.push({
+    titulo: '',
+    descricao: '',
+    categoria: 'Instagram',
+    status: 'Ideia'
+  })
+
+  setData(novo)
+}
+
+function removeIdea(index) {
+  const novo = structuredClone(data)
+  novo.ideias.splice(index, 1)
+  setData(novo)
+}
 
   function entrarAdmin() {
     if (adminPassword === 'fluxo2026') {
@@ -157,7 +204,9 @@ function App() {
         <button className={page === 'dashboard' ? 'active' : ''} onClick={() => setPage('dashboard')}>
           📊 Dashboard
         </button>
-
+<button className={page === 'ideias' ? 'active' : ''} onClick={() => setPage('ideias')}>
+  💡 Banco de Ideias
+</button>
         <button className={page === 'planner' ? 'active' : ''} onClick={() => setPage('planner')}>
           🗓️ Planner
         </button>
@@ -184,12 +233,13 @@ function App() {
       </aside>
 
       <main className="main">
-        {page === 'dashboard' && <Dashboard data={data} />}
+        {page === 'dashboard' && <Dashboard data={data} lastUpdated={lastUpdated} />}
         {page === 'planner' && <Planner data={data} />}
         {page === 'instagram' && <Instagram data={data} />}
         {page === 'tiktok' && <TikTok data={data} />}
         {page === 'youtube' && <YouTube data={data} />}
         {page === 'whatsapp' && <WhatsApp data={data} />}
+        {page === 'ideias' && <BancoIdeias data={data} />}
 
         {page === 'admin' && !adminUnlocked && (
           <AdminLogin
@@ -201,16 +251,19 @@ function App() {
 
         {page === 'admin' && adminUnlocked && (
           <Admin
-            data={data}
-            update={update}
-            salvar={salvar}
-            updatePlanner={updatePlanner}
-            addPlannerItem={addPlannerItem}
-            removePlannerItem={removePlannerItem}
-            onLogout={sairAdmin}
-          />
+  data={data}
+  update={update}
+  salvar={salvar}
+  updatePlanner={updatePlanner}
+  addPlannerItem={addPlannerItem}
+  removePlannerItem={removePlannerItem}
+  updateIdea={updateIdea}
+  addIdea={addIdea}
+  removeIdea={removeIdea}
+  onLogout={sairAdmin}
+/>
         )}
-      </main>
+            </main>
     </div>
   )
 }
@@ -223,8 +276,21 @@ function PageHeader({ title, subtitle }) {
     </header>
   )
 }
+function LastUpdated({ value }) {
+  if (!value) return null
 
-function Dashboard({ data }) {
+  const formatted = new Date(value).toLocaleString('pt-BR', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  })
+
+  return (
+    <div className="last-updated">
+      Última atualização: <strong>{formatted}</strong>
+    </div>
+  )
+}
+function Dashboard({ data, lastUpdated }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
@@ -234,9 +300,11 @@ function Dashboard({ data }) {
     <>
       <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
 
-      <ObjectiveCard objetivo={data.objetivo} />
+<LastUpdated value={lastUpdated} />
 
+<ObjectiveCard objetivo={data.objetivo} />
       <NoticeCard aviso={data.aviso} />
+    <PlannerSummary data={data} />
 
       <section className="grid">
         <MetricCard
@@ -363,7 +431,29 @@ function WhatsApp({ data }) {
     </>
   )
 }
+function BancoIdeias({ data }) {
+  const ideias = data?.ideias || []
 
+  return (
+    <>
+      <PageHeader title="Banco de Ideias" subtitle="Ideias de conteúdos, campanhas e ações futuras" />
+
+      <section className="ideas-grid">
+        {ideias.map((item, index) => (
+          <div className="idea-card" key={index}>
+            <div className="idea-top">
+              <span>{item.categoria || 'Geral'}</span>
+              <strong>{item.status || 'Ideia'}</strong>
+            </div>
+
+            <h2>{item.titulo || 'Ideia sem título'}</h2>
+            <p>{item.descricao || 'Sem descrição cadastrada.'}</p>
+          </div>
+        ))}
+      </section>
+    </>
+  )
+}
 function AdminLogin({ password, setPassword, onLogin }) {
   return (
     <>
@@ -398,7 +488,18 @@ function AdminLogin({ password, setPassword, onLogin }) {
   )
 }
 
-function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlannerItem, onLogout }) {
+function Admin({
+  data,
+  update,
+  salvar,
+  updatePlanner,
+  addPlannerItem,
+  removePlannerItem,
+  updateIdea,
+  addIdea,
+  removeIdea,
+  onLogout
+}) {
   return (
     <>
       <PageHeader title="Painel Administrativo" subtitle="Edite números e tarefas do sistema" />
@@ -543,6 +644,58 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
 
         <div className="admin-block">
           <div className="admin-block-header">
+            <h2>Banco de Ideias</h2>
+
+            <button className="small-action" onClick={addIdea}>
+              + Nova ideia
+            </button>
+          </div>
+
+          {(data.ideias || []).map((item, index) => (
+            <div className="idea-admin-row" key={index}>
+              <input
+                placeholder="Título da ideia"
+                value={item.titulo}
+                onChange={e => updateIdea(index, 'titulo', e.target.value)}
+              />
+
+              <input
+                placeholder="Descrição"
+                value={item.descricao}
+                onChange={e => updateIdea(index, 'descricao', e.target.value)}
+              />
+
+              <select
+                value={item.categoria}
+                onChange={e => updateIdea(index, 'categoria', e.target.value)}
+              >
+                <option>Instagram</option>
+                <option>TikTok</option>
+                <option>YouTube</option>
+                <option>WhatsApp</option>
+                <option>Campanha</option>
+                <option>Geral</option>
+              </select>
+
+              <select
+                value={item.status}
+                onChange={e => updateIdea(index, 'status', e.target.value)}
+              >
+                <option>Ideia</option>
+                <option>Em análise</option>
+                <option>Aprovada</option>
+                <option>Executada</option>
+              </select>
+
+              <button className="remove" onClick={() => removeIdea(index)}>
+                Remover
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="admin-block">
+          <div className="admin-block-header">
             <h2>Planner</h2>
 
             <button className="small-action" onClick={addPlannerItem}>
@@ -591,6 +744,38 @@ function Admin({ data, update, salvar, updatePlanner, addPlannerItem, removePlan
         </button>
       </section>
     </>
+  )
+}
+function PlannerSummary({ data }) {
+  const planner = data?.planner || []
+
+  const total = planner.length
+  const pendentes = planner.filter(item => item.status === 'Pendente').length
+  const andamento = planner.filter(item => item.status === 'Em andamento').length
+  const concluidas = planner.filter(item => item.status === 'Concluído').length
+
+  return (
+    <section className="planner-summary">
+      <div className="summary-item">
+        <span>Total de tarefas</span>
+        <strong>{total}</strong>
+      </div>
+
+      <div className="summary-item pending">
+        <span>Pendentes</span>
+        <strong>{pendentes}</strong>
+      </div>
+
+      <div className="summary-item in-progress">
+        <span>Em andamento</span>
+        <strong>{andamento}</strong>
+      </div>
+
+      <div className="summary-item done">
+        <span>Concluídas</span>
+        <strong>{concluidas}</strong>
+      </div>
+    </section>
   )
 }
 
