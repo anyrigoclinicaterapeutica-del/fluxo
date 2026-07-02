@@ -227,6 +227,9 @@ setHasUnsavedChanges(true)
 <button className={page === 'relatorios' ? 'active' : ''} onClick={() => setPage('relatorios')}>
   📈 Relatórios
 </button>
+<button className={page === 'tarefas-diarias' ? 'active' : ''} onClick={() => setPage('tarefas-diarias')}>
+  ✅ Tarefa Diária
+</button>
         <button className={page === 'planner' ? 'active' : ''} onClick={() => setPage('planner')}>
           🗓️ Planner
         </button>
@@ -260,6 +263,8 @@ setHasUnsavedChanges(true)
     setPage={setPage}
   />
 )}
+
+{page === 'tarefas-diarias' && <TarefaDiaria data={data} />}
         {page === 'planner' && <Planner data={data} />}
         {page === 'instagram' && <Instagram data={data} />}
         {page === 'tiktok' && <TikTok data={data} />}
@@ -609,12 +614,13 @@ function Planner({ data }) {
     return bateStatus && bateBusca
   })
 
-  const filtros = [
-    { nome: 'Todos', total: planner.length },
-    { nome: 'Pendente', total: planner.filter(item => item.status === 'Pendente').length },
-    { nome: 'Em andamento', total: planner.filter(item => item.status === 'Em andamento').length },
-    { nome: 'Concluído', total: planner.filter(item => item.status === 'Concluído').length }
-  ]
+ const filtros = [
+  { nome: 'Todos', total: planner.length },
+  { nome: 'Pendente', total: planner.filter(item => item.status === 'Pendente').length },
+  { nome: 'Em andamento', total: planner.filter(item => item.status === 'Em andamento').length },
+  { nome: 'Não feito', total: planner.filter(item => item.status === 'Não feito').length },
+  { nome: 'Concluído', total: planner.filter(item => item.status === 'Concluído').length }
+]
 
   return (
     <>
@@ -763,6 +769,11 @@ function Relatorios({ data }) {
   const andamento = planner.filter(item => item.status === 'Em andamento').length
   const concluidas = planner.filter(item => item.status === 'Concluído').length
 
+const tarefasFeitas = planner.filter(item => item.status === 'Concluído')
+const tarefasNaoFeitas = planner.filter(item => item.status === 'Não feito')
+const tarefasEmAberto = planner.filter(item => item.status !== 'Concluído' && item.status !== 'Não feito')
+const tarefasAtrasadas = planner.filter(item => item.status !== 'Concluído' && dataJaPassou(item.data))
+
   const ideiasAnalise = ideias.filter(item => item.status === 'Em análise').length
   const ideiasAprovadas = ideias.filter(item => item.status === 'Aprovada').length
 
@@ -776,16 +787,17 @@ function Relatorios({ data }) {
   const melhorCanal = canais.reduce((melhor, atual) => {
     return atual.progresso > melhor.progresso ? atual : melhor
   }, canais[0])
-function gerarResumo() {
-  return `
+
+  function gerarResumo() {
+    return `
 📊 Resumo do Fluxo
 
 🚀 Melhor canal: ${melhorCanal.nome} com ${melhorCanal.progresso}%
 
 📌 Planner:
-- ${pendentes} tarefa(s) pendente(s)
-- ${andamento} em andamento
-- ${concluidas} concluída(s)
+- ✅ ${tarefasFeitas.length} atividade(s) resolvida(s)
+- ❌ ${tarefasNaoFeitas.length} não feita(s)
+- ⏰ ${tarefasAtrasadas.length} atrasada(s)
 
 💡 Banco de ideias:
 - ${ideias.length} ideia(s) cadastrada(s)
@@ -794,32 +806,35 @@ function gerarResumo() {
 
 Status geral: acompanhar prioridades e manter foco nas metas.
 `.trim()
-}
+  }
 
-async function copiarResumo() {
-  await navigator.clipboard.writeText(gerarResumo())
-  alert('Resumo copiado com sucesso!')
-}
+  async function copiarResumo() {
+    await navigator.clipboard.writeText(gerarResumo())
+    alert('Resumo copiado com sucesso!')
+  }
 
-function abrirWhatsApp() {
-  const texto = encodeURIComponent(gerarResumo())
-  window.open(`https://wa.me/?text=${texto}`, '_blank')
-}
+  function abrirWhatsApp() {
+    const texto = encodeURIComponent(gerarResumo())
+    window.open(`https://wa.me/?text=${texto}`, '_blank')
+  }
+
   return (
     <>
       <PageHeader
         title="Relatórios"
         subtitle="Resumo geral das metas, tarefas e ideias do Fluxo"
       />
-<section className="report-actions">
-  <button onClick={copiarResumo}>
-    Copiar resumo
-  </button>
 
-  <button onClick={abrirWhatsApp}>
-    Abrir no WhatsApp
-  </button>
-</section>
+      <section className="report-actions">
+        <button onClick={copiarResumo}>
+          Copiar resumo
+        </button>
+
+        <button onClick={abrirWhatsApp}>
+          Abrir no WhatsApp
+        </button>
+      </section>
+
       <section className="report-grid">
         <div className="report-card">
           <span>Melhor progresso</span>
@@ -840,6 +855,26 @@ function abrirWhatsApp() {
         </div>
       </section>
 
+      <section className="task-status-report">
+        <div className="task-status-card done">
+          <span>Resolvidas</span>
+          <strong>✅ {tarefasFeitas.length}</strong>
+          <p>Atividades concluídas</p>
+        </div>
+
+        <div className="task-status-card pending">
+          <span>Não feitas</span>
+          <strong>❌ {tarefasNaoFeitas.length}</strong>
+          <p>Pendentes ou em andamento</p>
+        </div>
+
+        <div className="task-status-card late">
+          <span>Atrasadas</span>
+          <strong>⏰ {tarefasAtrasadas.length}</strong>
+          <p>Data passou e não foram concluídas</p>
+        </div>
+      </section>
+
       <section className="report-insights">
         <div className="insight-card featured">
           <span>Análise automática</span>
@@ -851,9 +886,10 @@ function abrirWhatsApp() {
 
         <div className="insight-card">
           <span>Operação</span>
-          <h2>{pendentes + andamento} tarefa(s) precisam de atenção.</h2>
+        {tarefasNaoFeitas.length + tarefasEmAberto.length} atividade(s) precisam de atenção.
           <p>
-            O planner possui {pendentes} tarefa(s) pendente(s) e {andamento} em andamento.
+           Existem {tarefasFeitas.length} resolvida(s), {tarefasNaoFeitas.length} marcada(s) como não feita(s),
+{tarefasEmAberto.length} em aberto e {tarefasAtrasadas.length} atrasada(s).
           </p>
         </div>
 
@@ -863,6 +899,40 @@ function abrirWhatsApp() {
           <p>
             Existem {ideiasAnalise} ideia(s) em análise e {ideiasAprovadas} ideia(s) aprovada(s).
           </p>
+        </div>
+      </section>
+
+      <section className="task-history-grid">
+        <div className="task-history-card">
+          <h2>✅ Atividades feitas</h2>
+
+          {tarefasFeitas.length === 0 ? (
+            <p className="empty-history">Nenhuma atividade concluída ainda.</p>
+          ) : (
+            tarefasFeitas.map((item, index) => (
+              <div className="history-item" key={index}>
+                <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="task-history-card">
+          <h2>❌ Atividades não feitas</h2>
+
+          {tarefasNaoFeitas.length === 0 ? (
+            <p className="empty-history">Nenhuma atividade pendente no momento.</p>
+          ) : (
+            tarefasNaoFeitas.map((item, index) => (
+              <div className="history-item" key={index}>
+                <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                <p>
+                  {item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'} · {item.status || 'Pendente'}
+                </p>
+              </div>
+            ))
+          )}
         </div>
       </section>
 
@@ -877,6 +947,8 @@ function abrirWhatsApp() {
     </>
   )
 }
+
+
 function BancoIdeias({ data }) {
   const [filtro, setFiltro] = useState('Todos')
   const [busca, setBusca] = useState('')
@@ -1051,8 +1123,9 @@ function Admin({
               onChange={e => update('objetivo.status', e.target.value)}
             >
               <option>Pendente</option>
-              <option>Em andamento</option>
-              <option>Concluído</option>
+<option>Em andamento</option>
+<option>Não feito</option>
+<option>Concluído</option>
             </select>
           </label>
         </div>
@@ -1249,14 +1322,14 @@ function Admin({
               />
 
               <select
-                value={item.status}
-                onChange={e => updatePlanner(index, 'status', e.target.value)}
-              >
-                <option>Pendente</option>
-                <option>Em andamento</option>
-                <option>Concluído</option>
-              </select>
-
+  value={item.status}
+  onChange={e => updatePlanner(index, 'status', e.target.value)}
+>
+  <option>Pendente</option>
+  <option>Em andamento</option>
+  <option>Não feito</option>
+  <option>Concluído</option>
+</select>
               <button className="remove" onClick={() => removePlannerItem(index)}>
                 Remover
               </button>
@@ -1340,13 +1413,120 @@ function ObjectiveCard({ objetivo }) {
     </section>
   )
 }
+function hojeISO() {
+  const hoje = new Date()
+  const ano = hoje.getFullYear()
+  const mes = String(hoje.getMonth() + 1).padStart(2, '0')
+  const dia = String(hoje.getDate()).padStart(2, '0')
 
+  return `${ano}-${mes}-${dia}`
+}
+
+function normalizarDataPlanner(value) {
+  if (!value) return ''
+
+  const texto = String(value).trim()
+
+  if (texto.includes('/')) {
+    const [dia, mes, ano] = texto.split('/')
+
+    if (dia && mes && ano) {
+      return `${ano.padStart(4, '0')}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`
+    }
+  }
+
+  if (texto.includes('-')) {
+    const [ano, mes, dia] = texto.split('-')
+
+    if (ano && mes && dia) {
+      return `${ano.padStart(4, '0')}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`
+    }
+  }
+
+  return texto
+}
+
+function dataJaPassou(value) {
+  const data = normalizarDataPlanner(value)
+
+  if (!data) return false
+
+  return data < hojeISO()
+}
 function statusClass(status) {
   if (status === 'Concluído') return 'done'
   if (status === 'Em andamento') return 'in-progress'
+  if (status === 'Não feito') return 'not-done'
   return 'pending'
 }
+function TarefaDiaria({ data }) {
+  const planner = data?.planner || []
+  const hoje = hojeISO()
 
+  const tarefasHoje = planner.filter(item => {
+    return normalizarDataPlanner(item.data) === hoje
+  })
+
+  const feitas = tarefasHoje.filter(item => item.status === 'Concluído')
+  const naoFeitas = tarefasHoje.filter(item => item.status !== 'Concluído')
+
+  const dataFormatada = new Date().toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  })
+
+  return (
+    <>
+      <PageHeader
+        title="Tarefa Diária"
+        subtitle={`Atividades programadas para hoje: ${dataFormatada}`}
+      />
+
+      <section className="daily-task-summary">
+        <div className="daily-task-card">
+          <span>Atividades de hoje</span>
+          <strong>{tarefasHoje.length}</strong>
+          <p>Total encontrado no planner</p>
+        </div>
+
+        <div className="daily-task-card done">
+          <span>Resolvidas</span>
+          <strong>✅ {feitas.length}</strong>
+          <p>Marcadas como concluídas</p>
+        </div>
+
+        <div className="daily-task-card pending">
+          <span>Não feitas</span>
+          <strong>❌ {naoFeitas.length}</strong>
+          <p>Pendentes ou em andamento</p>
+        </div>
+      </section>
+
+      {tarefasHoje.length === 0 ? (
+        <section className="empty-state">
+          Nenhuma tarefa cadastrada para hoje no Planner.
+        </section>
+      ) : (
+        <section className="daily-task-list">
+          {tarefasHoje.map((item, index) => (
+            <div className="daily-task-item" key={index}>
+              <div>
+                <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+              </div>
+
+              <span className={`status ${statusClass(item.status)}`}>
+                {item.status || 'Pendente'}
+              </span>
+            </div>
+          ))}
+        </section>
+      )}
+    </>
+  )
+}
 function PlannerCard({ data }) {
   return (
     <section className="planner-section">

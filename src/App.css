@@ -2517,4 +2517,164 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
+}/* Tarefa diária */
+
+.daily-task-summary,
+.task-status-report {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.daily-task-card,
+.task-status-card {
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow);
+}
+
+.daily-task-card.done,
+.task-status-card.done {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.daily-task-card.pending,
+.task-status-card.pending {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.task-status-card.late {
+  border-color: rgba(251, 191, 36, 0.42);
+}
+
+.daily-task-card span,
+.task-status-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.daily-task-card strong,
+.task-status-card strong {
+  display: block;
+  color: var(--ink);
+  font-size: 30px;
+  font-weight: 950;
+  margin-bottom: 6px;
+}
+
+.daily-task-card p,
+.task-status-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.daily-task-list {
+  display: grid;
+  gap: 12px;
+}
+
+.daily-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: var(--shadow);
+}
+
+.daily-task-item strong {
+  display: block;
+  color: var(--ink);
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.daily-task-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Histórico de tarefas nos relatórios */
+
+.task-history-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.task-history-card {
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow);
+}
+
+.task-history-card h2 {
+  margin: 0 0 16px;
+  color: var(--ink);
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+
+.history-item {
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.history-item strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.history-item p,
+.empty-history {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .daily-task-summary,
+  .task-status-report,
+  .task-history-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .daily-task-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}/* Status Não feito */
+
+.status.not-done {
+  background: rgba(239, 68, 68, 0.14);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.summary-item.not-done,
+.task-status-card.pending,
+.daily-task-card.pending {
+  border-color: rgba(239, 68, 68, 0.35);
 }
