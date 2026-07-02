@@ -4,6 +4,7 @@ import './App.css'
 
 const initialData = {
   instagram: { seguidores: 24500, seguidoresMesAnterior: 23000, meta: 30000, engajamento: 4.2 },
+  facebook: { seguidores: 5000, seguidoresMesAnterior: 4500, meta: 8000, engajamento: 3.1 },
   tiktok: { visualizacoes: 120000, meta: 200000, seguidores: 1200, seguidoresMesAnterior: 1000 },
   youtube: { inscritos: 8600, inscritosMesAnterior: 8000, meta: 10000 },
   whatsapp: { conversoes: 32, meta: 50 },
@@ -73,6 +74,7 @@ if (registro?.data) {
     ...initialData,
     ...registro.data,
     instagram: { ...initialData.instagram, ...registro.data.instagram },
+    
     tiktok: { ...initialData.tiktok, ...registro.data.tiktok },
     youtube: { ...initialData.youtube, ...registro.data.youtube },
     whatsapp: { ...initialData.whatsapp, ...registro.data.whatsapp },
@@ -238,6 +240,10 @@ setHasUnsavedChanges(true)
           📱 Instagram
         </button>
 
+<button className={page === 'facebook' ? 'active' : ''} onClick={() => setPage('facebook')}>
+  👍 Facebook
+</button>
+
         <button className={page === 'tiktok' ? 'active' : ''} onClick={() => setPage('tiktok')}>
           🎵 TikTok
         </button>
@@ -267,6 +273,7 @@ setHasUnsavedChanges(true)
 {page === 'tarefas-diarias' && <TarefaDiaria data={data} />}
         {page === 'planner' && <Planner data={data} />}
         {page === 'instagram' && <Instagram data={data} />}
+        {page === 'facebook' && <Facebook data={data} />}
         {page === 'tiktok' && <TikTok data={data} />}
         {page === 'youtube' && <YouTube data={data} />}
         {page === 'whatsapp' && <WhatsApp data={data} />}
@@ -527,12 +534,13 @@ function LatestIdeas({ ideias, setPage }) {
 
 function Dashboard({ data, lastUpdated, setPage }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+  const progressoFacebook = calcularProgresso(data.facebook.seguidores, data.facebook.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
   const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
 
   const progressoMedio = Math.round(
-    (progressoInstagram + progressoTikTok + progressoYouTube + progressoWhatsApp) / 4
+    (progressoInstagram + progressoFacebook + progressoTikTok + progressoYouTube + progressoWhatsApp) / 5
   )
 
   return (
@@ -570,6 +578,13 @@ function Dashboard({ data, lastUpdated, setPage }) {
           meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
           percent={progressoInstagram}
         />
+
+<MetricCard
+  title="Facebook"
+  value={data.facebook.seguidores.toLocaleString('pt-BR')}
+  meta={`Meta: ${data.facebook.meta.toLocaleString('pt-BR')}`}
+  percent={progressoFacebook}
+/>
 
         <MetricCard
           title="TikTok"
@@ -698,6 +713,40 @@ function Instagram({ data }) {
       </section>
     </>
   )
+}function Facebook({ data }) {
+  const progressoSeguidores = calcularProgresso(data.facebook.seguidores, data.facebook.meta)
+
+  const crescimentoMensal = calcularCrescimentoMensal(
+    data.facebook.seguidores,
+    data.facebook.seguidoresMesAnterior
+  )
+
+  return (
+    <>
+      <PageHeader title="Facebook" subtitle="Seguidores, engajamento e crescimento mensal" />
+
+      <section className="grid">
+        <MetricCard
+          title="Seguidores"
+          value={data.facebook.seguidores.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.facebook.meta.toLocaleString('pt-BR')}`}
+          percent={progressoSeguidores}
+        />
+
+        <Card
+          title="Crescimento mensal"
+          value={`${crescimentoMensal}%`}
+          meta={`Início do mês: ${(data.facebook.seguidoresMesAnterior || 0).toLocaleString('pt-BR')}`}
+        />
+
+        <Card
+          title="Engajamento"
+          value={`${data.facebook.engajamento || 0}%`}
+          meta="Taxa atual"
+        />
+      </section>
+    </>
+  )
 }
 
 function TikTok({ data }) {
@@ -803,6 +852,7 @@ function ReportRow({ name, percent }) {
 
 function Relatorios({ data }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+  const progressoFacebook = calcularProgresso(data.facebook.seguidores, data.facebook.meta)
   const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
   const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
   const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
@@ -823,11 +873,12 @@ const tarefasAtrasadas = planner.filter(item => item.status !== 'Concluído' && 
   const ideiasAprovadas = ideias.filter(item => item.status === 'Aprovada').length
 
   const canais = [
-    { nome: 'Instagram', progresso: progressoInstagram },
-    { nome: 'TikTok', progresso: progressoTikTok },
-    { nome: 'YouTube', progresso: progressoYouTube },
-    { nome: 'WhatsApp', progresso: progressoWhatsApp }
-  ]
+  { nome: 'Instagram', progresso: progressoInstagram },
+  { nome: 'Facebook', progresso: progressoFacebook },
+  { nome: 'TikTok', progresso: progressoTikTok },
+  { nome: 'YouTube', progresso: progressoYouTube },
+  { nome: 'WhatsApp', progresso: progressoWhatsApp }
+]
 
   const melhorCanal = canais.reduce((melhor, atual) => {
     return atual.progresso > melhor.progresso ? atual : melhor
@@ -985,9 +1036,10 @@ Status geral: acompanhar prioridades e manter foco nas metas.
         <h2>Desempenho por canal</h2>
 
         <ReportRow name="Instagram" percent={progressoInstagram} />
-        <ReportRow name="TikTok" percent={progressoTikTok} />
-        <ReportRow name="YouTube" percent={progressoYouTube} />
-        <ReportRow name="WhatsApp" percent={progressoWhatsApp} />
+<ReportRow name="Facebook" percent={progressoFacebook} />
+<ReportRow name="TikTok" percent={progressoTikTok} />
+<ReportRow name="YouTube" percent={progressoYouTube} />
+<ReportRow name="WhatsApp" percent={progressoWhatsApp} />
       </section>
     </>
   )
@@ -1222,7 +1274,33 @@ function Admin({
             onChange={v => update('instagram.engajamento', v)}
           />
         </div>
+<div className="admin-block">
+  <h2>Facebook</h2>
 
+  <Field
+    label="Seguidores Facebook"
+    value={data.facebook.seguidores}
+    onChange={v => update('facebook.seguidores', v)}
+  />
+
+  <Field
+    label="Seguidores Facebook no início do mês"
+    value={data.facebook.seguidoresMesAnterior || ''}
+    onChange={v => update('facebook.seguidoresMesAnterior', v)}
+  />
+
+  <Field
+    label="Meta Facebook"
+    value={data.facebook.meta}
+    onChange={v => update('facebook.meta', v)}
+  />
+
+  <Field
+    label="Engajamento Facebook"
+    value={data.facebook.engajamento || ''}
+    onChange={v => update('facebook.engajamento', v)}
+  />
+</div>
         <div className="admin-block">
           <h2>TikTok</h2>
 
