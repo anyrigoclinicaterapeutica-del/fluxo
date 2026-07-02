@@ -766,14 +766,39 @@ function Relatorios({ data }) {
   const melhorCanal = canais.reduce((melhor, atual) => {
     return atual.progresso > melhor.progresso ? atual : melhor
   }, canais[0])
+async function copiarResumo() {
+  const resumo = `
+📊 Resumo do Fluxo
 
+🚀 Melhor canal: ${melhorCanal.nome} com ${melhorCanal.progresso}%
+
+📌 Planner:
+- ${pendentes} tarefa(s) pendente(s)
+- ${andamento} em andamento
+- ${concluidas} concluída(s)
+
+💡 Banco de ideias:
+- ${ideias.length} ideia(s) cadastrada(s)
+- ${ideiasAnalise} em análise
+- ${ideiasAprovadas} aprovada(s)
+
+Status geral: acompanhar prioridades e manter foco nas metas.
+`.trim()
+
+  await navigator.clipboard.writeText(resumo)
+  alert('Resumo copiado com sucesso!')
+}
   return (
     <>
       <PageHeader
         title="Relatórios"
         subtitle="Resumo geral das metas, tarefas e ideias do Fluxo"
       />
-
+<section className="report-actions">
+  <button onClick={copiarResumo}>
+    Copiar resumo para WhatsApp
+  </button>
+</section>
       <section className="report-grid">
         <div className="report-card">
           <span>Melhor progresso</span>
