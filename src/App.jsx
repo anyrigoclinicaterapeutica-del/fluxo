@@ -529,12 +529,25 @@ const progressoMedio = Math.round(
 
 function Planner({ data }) {
   const [filtro, setFiltro] = useState('Todos')
+  const [busca, setBusca] = useState('')
   const planner = data?.planner || []
 
-  const tarefasFiltradas =
-    filtro === 'Todos'
-      ? planner
-      : planner.filter(item => item.status === filtro)
+  const termoBusca = busca.toLowerCase().trim()
+
+  const tarefasFiltradas = planner.filter(item => {
+    const bateStatus = filtro === 'Todos' || item.status === filtro
+
+    const texto = `
+      ${item.data || ''}
+      ${item.tarefa || ''}
+      ${item.responsavel || ''}
+      ${item.status || ''}
+    `.toLowerCase()
+
+    const bateBusca = termoBusca === '' || texto.includes(termoBusca)
+
+    return bateStatus && bateBusca
+  })
 
   const filtros = [
     { nome: 'Todos', total: planner.length },
@@ -546,6 +559,14 @@ function Planner({ data }) {
   return (
     <>
       <PageHeader title="Planner" subtitle="Tarefas e prioridades da equipe" />
+
+      <section className="planner-search">
+        <input
+          value={busca}
+          onChange={e => setBusca(e.target.value)}
+          placeholder="Buscar tarefa por nome, responsável, data ou status..."
+        />
+      </section>
 
       <section className="planner-filters">
         {filtros.map(item => (
@@ -562,7 +583,7 @@ function Planner({ data }) {
 
       {tarefasFiltradas.length === 0 ? (
         <section className="empty-state">
-          Nenhuma tarefa encontrada para este filtro.
+          Nenhuma tarefa encontrada para essa busca ou filtro.
         </section>
       ) : (
         <PlannerCard data={{ ...data, planner: tarefasFiltradas }} />

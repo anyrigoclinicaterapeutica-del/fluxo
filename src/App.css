@@ -2265,4 +2265,30 @@ body {
   outline: none;
   border-color: rgba(236, 72, 153, 0.55);
   box-shadow: 0 24px 70px -34px rgba(236, 72, 153, 0.7);
+}/* Busca do Planner */
+
+.planner-search {
+  margin-bottom: 16px;
+}
+
+.planner-search input {
+  width: 100%;
+  border-radius: 18px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  box-shadow: var(--shadow);
+}
+
+.planner-search input::placeholder {
+  color: var(--muted);
+}
+
+.planner-search input:focus {
+  outline: none;
+  border-color: rgba(236, 72, 153, 0.55);
+  box-shadow: 0 24px 70px -34px rgba(236, 72, 153, 0.7);
 }
