@@ -1682,4 +1682,89 @@ textarea {
   .executive-summary {
     grid-template-columns: 1fr;
   }
+}/* Foco do dia */
+
+.daily-focus {
+  margin-bottom: 24px;
+  border-radius: 26px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(124, 58, 237, 0.22), transparent 38%),
+    linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow);
+}
+
+.daily-focus-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.daily-focus-head span {
+  display: block;
+  color: #f9a8d4;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.daily-focus-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 26px;
+  letter-spacing: -0.04em;
+}
+
+.daily-focus-head strong {
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.focus-list {
+  display: grid;
+  gap: 12px;
+}
+
+.focus-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.focus-item strong {
+  display: block;
+  color: var(--ink);
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.focus-item p,
+.empty-focus {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .daily-focus-head,
+  .focus-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

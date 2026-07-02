@@ -356,6 +356,42 @@ function QuickActions({ setPage }) {
       </div>
     </section>
   )
+}function DailyFocus({ planner }) {
+  const tarefasAtivas = planner
+    .filter(item => item.status !== 'Concluído')
+    .slice(0, 3)
+
+  return (
+    <section className="daily-focus">
+      <div className="daily-focus-head">
+        <div>
+          <span>Prioridade operacional</span>
+          <h2>Foco do dia</h2>
+        </div>
+
+        <strong>{tarefasAtivas.length} ativa(s)</strong>
+      </div>
+
+      {tarefasAtivas.length === 0 ? (
+        <p className="empty-focus">Nenhuma tarefa pendente no momento. Tudo em dia 🔥</p>
+      ) : (
+        <div className="focus-list">
+          {tarefasAtivas.map((item, index) => (
+            <div className="focus-item" key={index}>
+              <div>
+                <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+              </div>
+
+              <span className={`status ${statusClass(item.status)}`}>
+                {item.status || 'Pendente'}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  )
 }
 function Dashboard({ data, lastUpdated, setPage }) {
   const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
@@ -382,6 +418,8 @@ const progressoMedio = Math.round(
   totalIdeias={data.ideias?.length || 0}
   statusObjetivo={data.objetivo?.status || 'Pendente'}
 />
+
+<DailyFocus planner={data.planner || []} />
 
 <ObjectiveCard objetivo={data.objetivo} />
       <NoticeCard aviso={data.aviso} />
