@@ -2377,4 +2377,60 @@ body {
   .latest-ideas-head {
     flex-direction: column;
   }
+}/* Análise automática dos Relatórios */
+
+.report-insights {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.insight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow);
+}
+
+.insight-card.featured {
+  background:
+    radial-gradient(circle at top right, rgba(236, 72, 153, 0.26), transparent 38%),
+    radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.24), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+}
+
+.insight-card span {
+  display: block;
+  color: #f9a8d4;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.insight-card h2 {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.insight-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .report-insights {
+    grid-template-columns: 1fr;
+  }
 }

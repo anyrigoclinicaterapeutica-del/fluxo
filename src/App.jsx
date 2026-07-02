@@ -753,6 +753,20 @@ function Relatorios({ data }) {
   const andamento = planner.filter(item => item.status === 'Em andamento').length
   const concluidas = planner.filter(item => item.status === 'Concluído').length
 
+  const ideiasAnalise = ideias.filter(item => item.status === 'Em análise').length
+  const ideiasAprovadas = ideias.filter(item => item.status === 'Aprovada').length
+
+  const canais = [
+    { nome: 'Instagram', progresso: progressoInstagram },
+    { nome: 'TikTok', progresso: progressoTikTok },
+    { nome: 'YouTube', progresso: progressoYouTube },
+    { nome: 'WhatsApp', progresso: progressoWhatsApp }
+  ]
+
+  const melhorCanal = canais.reduce((melhor, atual) => {
+    return atual.progresso > melhor.progresso ? atual : melhor
+  }, canais[0])
+
   return (
     <>
       <PageHeader
@@ -763,8 +777,8 @@ function Relatorios({ data }) {
       <section className="report-grid">
         <div className="report-card">
           <span>Melhor progresso</span>
-          <strong>{Math.max(progressoInstagram, progressoTikTok, progressoYouTube, progressoWhatsApp)}%</strong>
-          <p>Maior avanço atual entre os canais</p>
+          <strong>{melhorCanal.progresso}%</strong>
+          <p>{melhorCanal.nome} está com o maior avanço atual</p>
         </div>
 
         <div className="report-card">
@@ -776,7 +790,33 @@ function Relatorios({ data }) {
         <div className="report-card">
           <span>Ideias cadastradas</span>
           <strong>{ideias.length}</strong>
-          <p>Banco de ideias ativo para campanhas e conteúdos</p>
+          <p>{ideiasAnalise} em análise · {ideiasAprovadas} aprovadas</p>
+        </div>
+      </section>
+
+      <section className="report-insights">
+        <div className="insight-card featured">
+          <span>Análise automática</span>
+          <h2>{melhorCanal.nome} é o canal em maior destaque agora.</h2>
+          <p>
+            Esse canal está com {melhorCanal.progresso}% de progresso em relação à meta cadastrada.
+          </p>
+        </div>
+
+        <div className="insight-card">
+          <span>Operação</span>
+          <h2>{pendentes + andamento} tarefa(s) precisam de atenção.</h2>
+          <p>
+            O planner possui {pendentes} tarefa(s) pendente(s) e {andamento} em andamento.
+          </p>
+        </div>
+
+        <div className="insight-card">
+          <span>Criação</span>
+          <h2>{ideias.length} ideia(s) disponíveis no banco.</h2>
+          <p>
+            Existem {ideiasAnalise} ideia(s) em análise e {ideiasAprovadas} ideia(s) aprovada(s).
+          </p>
         </div>
       </section>
 
