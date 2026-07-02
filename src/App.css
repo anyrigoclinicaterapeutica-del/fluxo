@@ -2010,4 +2010,54 @@ body {
     grid-column: 2;
     justify-self: start;
   }
+}/* Filtros do Planner */
+
+.planner-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.planner-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 11px 15px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.planner-filters button:hover,
+.planner-filters button.active {
+  color: var(--ink);
+  border-color: rgba(236, 72, 153, 0.45);
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.35), rgba(236, 72, 153, 0.25));
+}
+
+.planner-filters span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.empty-state {
+  border-radius: 22px;
+  padding: 26px;
+  color: var(--muted);
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: var(--shadow);
 }

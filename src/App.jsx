@@ -520,10 +520,45 @@ const progressoMedio = Math.round(
 }
 
 function Planner({ data }) {
+  const [filtro, setFiltro] = useState('Todos')
+  const planner = data?.planner || []
+
+  const tarefasFiltradas =
+    filtro === 'Todos'
+      ? planner
+      : planner.filter(item => item.status === filtro)
+
+  const filtros = [
+    { nome: 'Todos', total: planner.length },
+    { nome: 'Pendente', total: planner.filter(item => item.status === 'Pendente').length },
+    { nome: 'Em andamento', total: planner.filter(item => item.status === 'Em andamento').length },
+    { nome: 'Concluído', total: planner.filter(item => item.status === 'Concluído').length }
+  ]
+
   return (
     <>
       <PageHeader title="Planner" subtitle="Tarefas e prioridades da equipe" />
-      <PlannerCard data={data} />
+
+      <section className="planner-filters">
+        {filtros.map(item => (
+          <button
+            key={item.nome}
+            className={filtro === item.nome ? 'active' : ''}
+            onClick={() => setFiltro(item.nome)}
+          >
+            {item.nome}
+            <span>{item.total}</span>
+          </button>
+        ))}
+      </section>
+
+      {tarefasFiltradas.length === 0 ? (
+        <section className="empty-state">
+          Nenhuma tarefa encontrada para este filtro.
+        </section>
+      ) : (
+        <PlannerCard data={{ ...data, planner: tarefasFiltradas }} />
+      )}
     </>
   )
 }
