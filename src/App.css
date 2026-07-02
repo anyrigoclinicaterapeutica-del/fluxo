@@ -2681,4 +2681,22 @@ body {
 
 .quick-actions {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}/* Corrige botão Admin para não ficar marcado fixo */
+
+.sidebar button.admin-btn:not(.active),
+.sidebar button:not(.active).admin-btn,
+.sidebar button:last-child:not(.active) {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.sidebar button.active {
+  background: var(--grad-brand) !important;
+  color: white !important;
+  box-shadow: 0 18px 50px -24px rgba(236, 72, 153, 0.9) !important;
+}/* Campo de data no tema escuro */
+
+.admin input[type="date"] {
+  color-scheme: dark;
 }

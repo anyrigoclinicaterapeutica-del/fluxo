@@ -413,7 +413,7 @@ function DailyFocus({ planner }) {
             <div className="focus-item" key={index}>
               <div>
                 <strong>{item.tarefa || 'Tarefa sem título'}</strong>
-                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+                <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
               </div>
 
               <span className={`status ${statusClass(item.status)}`}>
@@ -918,7 +918,7 @@ Status geral: acompanhar prioridades e manter foco nas metas.
             tarefasFeitas.map((item, index) => (
               <div className="history-item" key={index}>
                 <strong>{item.tarefa || 'Tarefa sem título'}</strong>
-                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+                <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
               </div>
             ))
           )}
@@ -934,7 +934,7 @@ Status geral: acompanhar prioridades e manter foco nas metas.
               <div className="history-item" key={index}>
                 <strong>{item.tarefa || 'Tarefa sem título'}</strong>
                 <p>
-                  {item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'} · {item.status || 'Pendente'}
+                  {formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'} · {item.status || 'Pendente'}
                 </p>
               </div>
             ))
@@ -1310,10 +1310,10 @@ function Admin({
           {data.planner.map((item, index) => (
             <div className="planner-admin-row" key={index}>
               <input
-                placeholder="Data"
-                value={item.data}
-                onChange={e => updatePlanner(index, 'data', e.target.value)}
-              />
+  type="date"
+  value={normalizarDataPlanner(item.data)}
+  onChange={e => updatePlanner(index, 'data', e.target.value)}
+/>
 
               <input
                 placeholder="Tarefa"
@@ -1451,7 +1451,19 @@ function normalizarDataPlanner(value) {
 
   return texto
 }
+function formatarDataPlanner(value) {
+  const data = normalizarDataPlanner(value)
 
+  if (!data) return 'Sem data'
+
+  const [ano, mes, dia] = data.split('-')
+
+  if (!ano || !mes || !dia) {
+    return value || 'Sem data'
+  }
+
+  return `${dia}/${mes}/${ano}`
+}
 function dataJaPassou(value) {
   const data = normalizarDataPlanner(value)
 
@@ -1520,7 +1532,7 @@ function TarefaDiaria({ data }) {
             <div className="daily-task-item" key={index}>
               <div>
                 <strong>{item.tarefa || 'Tarefa sem título'}</strong>
-                <p>{item.data || 'Sem data'} · {item.responsavel || 'Sem responsável'}</p>
+                <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
               </div>
 
               <span className={`status ${statusClass(item.status)}`}>
@@ -1545,7 +1557,7 @@ function PlannerCard({ data }) {
         {data.planner.map((item, index) => (
           <div className="planner-item" key={index}>
             <div className="planner-date">
-              <span>{item.data || 'Sem data'}</span>
+              <span>{formatarDataPlanner(item.data)}</span>
             </div>
 
             <div className="planner-content">
