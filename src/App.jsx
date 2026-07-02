@@ -722,12 +722,25 @@ function Relatorios({ data }) {
 }
 function BancoIdeias({ data }) {
   const [filtro, setFiltro] = useState('Todos')
+  const [busca, setBusca] = useState('')
   const ideias = data?.ideias || []
 
-  const ideiasFiltradas =
-    filtro === 'Todos'
-      ? ideias
-      : ideias.filter(item => item.status === filtro)
+  const termoBusca = busca.toLowerCase().trim()
+
+  const ideiasFiltradas = ideias.filter(item => {
+    const bateStatus = filtro === 'Todos' || item.status === filtro
+
+    const texto = `
+      ${item.titulo || ''}
+      ${item.descricao || ''}
+      ${item.categoria || ''}
+      ${item.status || ''}
+    `.toLowerCase()
+
+    const bateBusca = termoBusca === '' || texto.includes(termoBusca)
+
+    return bateStatus && bateBusca
+  })
 
   const filtros = [
     { nome: 'Todos', total: ideias.length },
@@ -740,6 +753,14 @@ function BancoIdeias({ data }) {
   return (
     <>
       <PageHeader title="Banco de Ideias" subtitle="Ideias de conteúdos, campanhas e ações futuras" />
+
+      <section className="ideas-search">
+        <input
+          value={busca}
+          onChange={e => setBusca(e.target.value)}
+          placeholder="Buscar ideia por título, descrição, categoria ou status..."
+        />
+      </section>
 
       <section className="ideas-filters">
         {filtros.map(item => (
@@ -756,7 +777,7 @@ function BancoIdeias({ data }) {
 
       {ideiasFiltradas.length === 0 ? (
         <section className="empty-state">
-          Nenhuma ideia encontrada para este filtro.
+          Nenhuma ideia encontrada para essa busca ou filtro.
         </section>
       ) : (
         <section className="ideas-grid">
