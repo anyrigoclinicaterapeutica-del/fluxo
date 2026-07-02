@@ -336,7 +336,9 @@ function QuickActions({ setPage }) {
       </button>
     </section>
   )
-}function ExecutiveSummary({ progressoMedio, totalTarefas, totalIdeias, statusObjetivo }) {
+}
+
+function ExecutiveSummary({ progressoMedio, totalTarefas, totalIdeias, statusObjetivo }) {
   return (
     <section className="executive-summary">
       <div className="summary-card highlight">
@@ -364,7 +366,9 @@ function QuickActions({ setPage }) {
       </div>
     </section>
   )
-}function DailyFocus({ planner }) {
+}
+
+function DailyFocus({ planner }) {
   const tarefasAtivas = planner
     .filter(item => item.status !== 'Concluído')
     .slice(0, 3)
@@ -401,72 +405,8 @@ function QuickActions({ setPage }) {
     </section>
   )
 }
-function Dashboard({ data, lastUpdated, setPage }) {
-  const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
-  const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
-  const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
-  const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
-const progressoMedio = Math.round(
-  (progressoInstagram + progressoTikTok + progressoYouTube + progressoWhatsApp) / 4
-)
-  return (
-    <>
-      <header className="dashboard-hero">
-  <span>Central de comando</span>
-  <h1>Marketing em movimento</h1>
-  <p>Visão geral das metas, tarefas, ideias e canais em tempo real.</p>
-</header>
 
-<LastUpdated value={lastUpdated} />
-<QuickActions setPage={setPage} />
-
-<ExecutiveSummary
-  progressoMedio={progressoMedio}
-  totalTarefas={data.planner?.length || 0}
-  totalIdeias={data.ideias?.length || 0}
-  statusObjetivo={data.objetivo?.status || 'Pendente'}
-/>
-
-<DailyFocus planner={data.planner || []} />
-<TeamOverview planner={data.planner || []} />
-<ObjectiveCard objetivo={data.objetivo} />
-      <NoticeCard aviso={data.aviso} />
-    <PlannerSummary data={data} />
-
-      <section className="grid">
-        <MetricCard
-          title="Instagram"
-          value={data.instagram.seguidores.toLocaleString('pt-BR')}
-          meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
-          percent={progressoInstagram}
-        />
-
-        <MetricCard
-          title="TikTok"
-          value={data.tiktok.visualizacoes.toLocaleString('pt-BR')}
-          meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`}
-          percent={progressoTikTok}
-        />
-
-        <MetricCard
-          title="YouTube"
-          value={data.youtube.inscritos.toLocaleString('pt-BR')}
-          meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`}
-          percent={progressoYouTube}
-        />
-
-        <MetricCard
-          title="WhatsApp"
-          value={data.whatsapp.conversoes}
-          meta={`Meta: ${data.whatsapp.meta}`}
-          percent={progressoWhatsApp}
-        />
-      </section>
-
-      <PlannerCard data={data} />
-    </>
-  )
-}function TeamOverview({ planner }) {
+function TeamOverview({ planner }) {
   const pessoas = planner.reduce((acc, item) => {
     const nome = item.responsavel?.trim() || 'Sem responsável'
 
@@ -524,6 +464,116 @@ const progressoMedio = Math.round(
         </div>
       )}
     </section>
+  )
+}
+
+function LatestIdeas({ ideias, setPage }) {
+  const ultimasIdeias = ideias.slice(-3).reverse()
+
+  return (
+    <section className="latest-ideas">
+      <div className="latest-ideas-head">
+        <div>
+          <span>Criação</span>
+          <h2>Últimas ideias</h2>
+        </div>
+
+        <button onClick={() => setPage('ideias')}>
+          Ver banco completo
+        </button>
+      </div>
+
+      {ultimasIdeias.length === 0 ? (
+        <p className="empty-ideas">Nenhuma ideia cadastrada ainda.</p>
+      ) : (
+        <div className="latest-ideas-list">
+          {ultimasIdeias.map((item, index) => (
+            <div className="latest-idea" key={index}>
+              <div className="idea-top">
+                <span>{item.categoria || 'Geral'}</span>
+                <strong>{item.status || 'Ideia'}</strong>
+              </div>
+
+              <h3>{item.titulo || 'Ideia sem título'}</h3>
+              <p>{item.descricao || 'Sem descrição cadastrada.'}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  )
+}
+
+function Dashboard({ data, lastUpdated, setPage }) {
+  const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+  const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
+  const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
+  const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
+
+  const progressoMedio = Math.round(
+    (progressoInstagram + progressoTikTok + progressoYouTube + progressoWhatsApp) / 4
+  )
+
+  return (
+    <>
+      <header className="dashboard-hero">
+        <span>Central de comando</span>
+        <h1>Marketing em movimento</h1>
+        <p>Visão geral das metas, tarefas, ideias e canais em tempo real.</p>
+      </header>
+
+      <LastUpdated value={lastUpdated} />
+      <QuickActions setPage={setPage} />
+
+      <ExecutiveSummary
+        progressoMedio={progressoMedio}
+        totalTarefas={data.planner?.length || 0}
+        totalIdeias={data.ideias?.length || 0}
+        statusObjetivo={data.objetivo?.status || 'Pendente'}
+      />
+
+      <DailyFocus planner={data.planner || []} />
+
+      <TeamOverview planner={data.planner || []} />
+
+      <LatestIdeas ideias={data.ideias || []} setPage={setPage} />
+
+      <ObjectiveCard objetivo={data.objetivo} />
+      <NoticeCard aviso={data.aviso} />
+      <PlannerSummary data={data} />
+
+      <section className="grid">
+        <MetricCard
+          title="Instagram"
+          value={data.instagram.seguidores.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.instagram.meta.toLocaleString('pt-BR')}`}
+          percent={progressoInstagram}
+        />
+
+        <MetricCard
+          title="TikTok"
+          value={data.tiktok.visualizacoes.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.tiktok.meta.toLocaleString('pt-BR')}`}
+          percent={progressoTikTok}
+        />
+
+        <MetricCard
+          title="YouTube"
+          value={data.youtube.inscritos.toLocaleString('pt-BR')}
+          meta={`Meta: ${data.youtube.meta.toLocaleString('pt-BR')}`}
+          percent={progressoYouTube}
+        />
+
+        <MetricCard
+          title="WhatsApp"
+          value={data.whatsapp.conversoes}
+          meta={`Meta: ${data.whatsapp.meta}`}
+          percent={progressoWhatsApp}
+        />
+      </section>
+
+      <PlannerCard data={data} />
+    </>
   )
 }
 
