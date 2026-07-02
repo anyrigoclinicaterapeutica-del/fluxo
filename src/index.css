@@ -248,4 +248,18 @@ code {
   .planner-summary {
     grid-template-columns: 1fr;
   }
+}/* Botão salvar fixo no painel Admin */
+
+.admin:not(.login-box) > .save {
+  position: sticky;
+  bottom: 22px;
+  z-index: 50;
+  display: block;
+  width: fit-content;
+  margin: 32px auto 0;
+  box-shadow: 0 18px 40px -16px rgba(236, 72, 153, 0.8);
+}
+
+.admin:not(.login-box) > .save::before {
+  content: "✓ ";
 }
