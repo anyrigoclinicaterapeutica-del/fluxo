@@ -1485,6 +1485,10 @@ function TarefaDiaria({ data }) {
     return normalizarDataPlanner(item.data) === hoje
   })
 
+  const tarefasAtrasadas = planner.filter(item => {
+    return item.status !== 'Concluído' && normalizarDataPlanner(item.data) < hoje
+  })
+
   const feitas = tarefasHoje.filter(item => item.status === 'Concluído')
   const naoFeitas = tarefasHoje.filter(item => item.status !== 'Concluído')
 
@@ -1518,30 +1522,65 @@ function TarefaDiaria({ data }) {
         <div className="daily-task-card pending">
           <span>Não feitas</span>
           <strong>❌ {naoFeitas.length}</strong>
-          <p>Pendentes ou em andamento</p>
+          <p>Pendentes, em andamento ou não feitas</p>
         </div>
       </section>
 
-      {tarefasHoje.length === 0 ? (
-        <section className="empty-state">
-          Nenhuma tarefa cadastrada para hoje no Planner.
-        </section>
-      ) : (
-        <section className="daily-task-list">
-          {tarefasHoje.map((item, index) => (
-            <div className="daily-task-item" key={index}>
-              <div>
-                <strong>{item.tarefa || 'Tarefa sem título'}</strong>
-                <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
-              </div>
+      <section className="daily-section">
+        <div className="daily-section-head">
+          <h2>✅ Tarefas de hoje</h2>
+          <span>{tarefasHoje.length} tarefa(s)</span>
+        </div>
 
-              <span className={`status ${statusClass(item.status)}`}>
-                {item.status || 'Pendente'}
-              </span>
-            </div>
-          ))}
-        </section>
-      )}
+        {tarefasHoje.length === 0 ? (
+          <section className="empty-state">
+            Nenhuma tarefa cadastrada para hoje no Planner.
+          </section>
+        ) : (
+          <section className="daily-task-list">
+            {tarefasHoje.map((item, index) => (
+              <div className="daily-task-item" key={index}>
+                <div>
+                  <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                  <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
+                </div>
+
+                <span className={`status ${statusClass(item.status)}`}>
+                  {item.status || 'Pendente'}
+                </span>
+              </div>
+            ))}
+          </section>
+        )}
+      </section>
+
+      <section className="daily-section late">
+        <div className="daily-section-head">
+          <h2>⏰ Tarefas atrasadas</h2>
+          <span>{tarefasAtrasadas.length} pendente(s)</span>
+        </div>
+
+        {tarefasAtrasadas.length === 0 ? (
+          <section className="empty-state">
+            Nenhuma tarefa atrasada no momento. Tudo sob controle 🔥
+          </section>
+        ) : (
+          <section className="daily-task-list">
+            {tarefasAtrasadas.map((item, index) => (
+              <div className="daily-task-item late" key={index}>
+                <div>
+                  <strong>{item.tarefa || 'Tarefa sem título'}</strong>
+                  <p>{formatarDataPlanner(item.data)} · {item.responsavel || 'Sem responsável'}</p>
+                </div>
+
+                <span className={`status ${statusClass(item.status)}`}>
+                  {item.status || 'Pendente'}
+                </span>
+              </div>
+            ))}
+          </section>
+        )}
+      </section>
     </>
   )
 }

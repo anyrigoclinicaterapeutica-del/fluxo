@@ -2699,4 +2699,46 @@ body {
 
 .admin input[type="date"] {
   color-scheme: dark;
+}/* Seções da Tarefa Diária */
+
+.daily-section {
+  margin-bottom: 24px;
+}
+
+.daily-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.daily-section-head h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 24px;
+  letter-spacing: -0.04em;
+}
+
+.daily-section-head span {
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 9px 13px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.daily-task-item.late {
+  border-color: rgba(251, 191, 36, 0.34);
+  background:
+    radial-gradient(circle at top right, rgba(251, 191, 36, 0.12), transparent 36%),
+    rgba(255, 255, 255, 0.055);
+}
+
+@media (max-width: 700px) {
+  .daily-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
