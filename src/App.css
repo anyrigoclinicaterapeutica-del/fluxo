@@ -1572,4 +1572,55 @@ textarea {
   .quick-actions {
     grid-template-columns: 1fr;
   }
+}/* Hero premium do Dashboard */
+
+.dashboard-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 34px;
+  margin-bottom: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(236, 72, 153, 0.28), transparent 34%),
+    radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.28), transparent 36%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 28px 90px -44px rgba(124, 58, 237, 0.8);
+}
+
+.dashboard-hero span {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f9a8d4;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.dashboard-hero h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.dashboard-hero p {
+  margin: 16px 0 0;
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+@media (max-width: 700px) {
+  .dashboard-hero {
+    padding: 26px;
+  }
 }

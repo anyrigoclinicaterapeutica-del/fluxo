@@ -337,7 +337,11 @@ function Dashboard({ data, lastUpdated, setPage }) {
 
   return (
     <>
-      <PageHeader title="Dashboard da Equipe" subtitle="Acompanhe os principais indicadores" />
+      <header className="dashboard-hero">
+  <span>Central de comando</span>
+  <h1>Marketing em movimento</h1>
+  <p>Visão geral das metas, tarefas, ideias e canais em tempo real.</p>
+</header>
 
 <LastUpdated value={lastUpdated} />
 <QuickActions setPage={setPage} />
