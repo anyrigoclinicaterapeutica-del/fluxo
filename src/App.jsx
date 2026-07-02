@@ -148,6 +148,10 @@ useEffect(() => {
   }
 
 function removePlannerItem(index) {
+  const confirmar = window.confirm('Tem certeza que deseja remover esta tarefa?')
+
+  if (!confirmar) return
+
   const novo = structuredClone(data)
   novo.planner.splice(index, 1)
   setData(novo)
@@ -173,6 +177,10 @@ function addIdea() {
 }
 
 function removeIdea(index) {
+  const confirmar = window.confirm('Tem certeza que deseja remover esta ideia?')
+
+  if (!confirmar) return
+
   const novo = structuredClone(data)
   novo.ideias.splice(index, 1)
   setData(novo)
@@ -957,56 +965,74 @@ function Admin({
         </div>
 
         <div className="admin-block">
-          <div className="admin-block-header">
-            <h2>Banco de Ideias</h2>
+  <div className="admin-block-header">
+    <h2>Banco de Ideias</h2>
 
-            <button className="small-action" onClick={addIdea}>
-              + Nova ideia
-            </button>
-          </div>
+    <button className="small-action" onClick={addIdea}>
+      + Nova ideia
+    </button>
+  </div>
 
-          {(data.ideias || []).map((item, index) => (
-            <div className="idea-admin-row" key={index}>
-              <input
-                placeholder="Título da ideia"
-                value={item.titulo}
-                onChange={e => updateIdea(index, 'titulo', e.target.value)}
-              />
+  {(data.ideias || []).map((item, index) => (
+    <div className="idea-admin-card" key={index}>
+      <div className="idea-admin-card-header">
+        <strong>Ideia #{index + 1}</strong>
 
-              <input
-                placeholder="Descrição"
-                value={item.descricao}
-                onChange={e => updateIdea(index, 'descricao', e.target.value)}
-              />
+        <button className="remove" onClick={() => removeIdea(index)}>
+          Remover esta ideia
+        </button>
+      </div>
 
-              <select
-                value={item.categoria}
-                onChange={e => updateIdea(index, 'categoria', e.target.value)}
-              >
-                <option>Instagram</option>
-                <option>TikTok</option>
-                <option>YouTube</option>
-                <option>WhatsApp</option>
-                <option>Campanha</option>
-                <option>Geral</option>
-              </select>
+      <div className="idea-admin-grid">
+        <label className="field">
+          <span>Título</span>
+          <input
+            placeholder="Título da ideia"
+            value={item.titulo || ''}
+            onChange={e => updateIdea(index, 'titulo', e.target.value)}
+          />
+        </label>
 
-              <select
-                value={item.status}
-                onChange={e => updateIdea(index, 'status', e.target.value)}
-              >
-                <option>Ideia</option>
-                <option>Em análise</option>
-                <option>Aprovada</option>
-                <option>Executada</option>
-              </select>
+        <label className="field">
+          <span>Categoria</span>
+          <select
+            value={item.categoria || 'Instagram'}
+            onChange={e => updateIdea(index, 'categoria', e.target.value)}
+          >
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>YouTube</option>
+            <option>WhatsApp</option>
+            <option>Campanha</option>
+            <option>Geral</option>
+          </select>
+        </label>
 
-              <button className="remove" onClick={() => removeIdea(index)}>
-                Remover
-              </button>
-            </div>
-          ))}
-        </div>
+        <label className="field full">
+          <span>Descrição</span>
+          <textarea
+            placeholder="Descrição da ideia"
+            value={item.descricao || ''}
+            onChange={e => updateIdea(index, 'descricao', e.target.value)}
+          />
+        </label>
+
+        <label className="field">
+          <span>Status</span>
+          <select
+            value={item.status || 'Ideia'}
+            onChange={e => updateIdea(index, 'status', e.target.value)}
+          >
+            <option>Ideia</option>
+            <option>Em análise</option>
+            <option>Aprovada</option>
+            <option>Executada</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  ))}
+</div>
 
         <div className="admin-block">
           <div className="admin-block-header">

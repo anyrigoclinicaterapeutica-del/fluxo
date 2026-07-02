@@ -2120,4 +2120,123 @@ body {
 .admin:not(.login-box) > .save:hover {
   transform: translateY(-2px);
   box-shadow: 0 30px 90px -32px rgba(236, 72, 153, 1);
+}/* Melhor organização do Banco de Ideias no Admin */
+
+.idea-admin-card {
+  padding: 18px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.idea-admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.idea-admin-card-header strong {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 950;
+}
+
+.idea-admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 14px;
+}
+
+.idea-admin-grid .field {
+  margin: 0;
+}
+
+.idea-admin-grid .field.full {
+  grid-column: 1 / -1;
+}
+
+.idea-admin-grid textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border-radius: 14px;
+  padding: 13px 14px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+}
+
+.idea-admin-grid textarea:focus {
+  outline: none;
+  border-color: rgba(236, 72, 153, 0.55);
+}
+
+@media (max-width: 760px) {
+  .idea-admin-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .idea-admin-grid {
+    grid-template-columns: 1fr;
+  }
+}/* Correção visual dos cards de ideias no Admin */
+
+.admin .idea-admin-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 18px;
+  align-items: start;
+}
+
+.admin .idea-admin-grid .field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px;
+  min-width: 0;
+  margin: 0 !important;
+}
+
+.admin .idea-admin-grid .field span {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--muted);
+}
+
+.admin .idea-admin-grid input,
+.admin .idea-admin-grid select,
+.admin .idea-admin-grid textarea {
+  width: 100% !important;
+  min-width: 0;
+}
+
+.admin .idea-admin-grid .field.full {
+  grid-column: 1 / -1;
+}
+
+.admin .idea-admin-grid textarea {
+  min-height: 110px;
+}
+
+.idea-admin-card-header {
+  align-items: center;
+}
+
+.idea-admin-card-header .remove {
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .admin .idea-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin .idea-admin-grid .field.full {
+    grid-column: auto;
+  }
 }
