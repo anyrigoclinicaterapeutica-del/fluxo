@@ -59,6 +59,7 @@ function App() {
   const [lastUpdated, setLastUpdated] = useState(null)
   const [adminUnlocked, setAdminUnlocked] = useState(false)
   const [adminPassword, setAdminPassword] = useState('')
+const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   async function carregar() {
     const { data: registro } = await supabase
@@ -104,6 +105,7 @@ async function salvar() {
     })
 
    setLastUpdated(agora)
+   setHasUnsavedChanges(false)
   alert('Dados salvos com sucesso!')
 }
 
@@ -126,12 +128,14 @@ useEffect(() => {
 
     atual[keys[keys.length - 1]] = Number(value) || value
     setData(novo)
+setHasUnsavedChanges(true)
   }
 
   function updatePlanner(index, field, value) {
     const novo = structuredClone(data)
     novo.planner[index][field] = value
     setData(novo)
+setHasUnsavedChanges(true)
   }
 
   function addPlannerItem() {
@@ -145,6 +149,7 @@ useEffect(() => {
     })
 
     setData(novo)
+setHasUnsavedChanges(true)
   }
 
 function removePlannerItem(index) {
@@ -155,12 +160,14 @@ function removePlannerItem(index) {
   const novo = structuredClone(data)
   novo.planner.splice(index, 1)
   setData(novo)
+setHasUnsavedChanges(true)
 }
 
 function updateIdea(index, field, value) {
   const novo = structuredClone(data)
   novo.ideias[index][field] = value
   setData(novo)
+setHasUnsavedChanges(true)
 }
 
 function addIdea() {
@@ -174,6 +181,7 @@ function addIdea() {
   })
 
   setData(novo)
+setHasUnsavedChanges(true)
 }
 
 function removeIdea(index) {
@@ -184,6 +192,7 @@ function removeIdea(index) {
   const novo = structuredClone(data)
   novo.ideias.splice(index, 1)
   setData(novo)
+setHasUnsavedChanges(true)
 }
 
   function entrarAdmin() {
@@ -277,6 +286,7 @@ function removeIdea(index) {
   updateIdea={updateIdea}
   addIdea={addIdea}
   removeIdea={removeIdea}
+  hasUnsavedChanges={hasUnsavedChanges}
   onLogout={sairAdmin}
 />
         )}
@@ -988,6 +998,7 @@ function Admin({
   updateIdea,
   addIdea,
   removeIdea,
+  hasUnsavedChanges,
   onLogout
 }) {
   return (
@@ -1006,6 +1017,12 @@ function Admin({
       </div>
 
       <section className="admin">
+        {hasUnsavedChanges && (
+  <div className="unsaved-alert">
+    <strong>Alterações pendentes</strong>
+    <span>Clique em Salvar alterações para publicar no site.</span>
+  </div>
+)}
         <div className="admin-block">
           <h2>Objetivo principal</h2>
 

@@ -2481,4 +2481,40 @@ body {
   .report-actions button {
     min-width: 0;
   }
+}/* Aviso de alterações não salvas */
+
+.unsaved-alert {
+  position: sticky;
+  top: 18px;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(251, 191, 36, 0.28), transparent 34%),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 24px 70px -34px rgba(251, 191, 36, 0.55);
+}
+
+.unsaved-alert strong {
+  color: var(--ink);
+  font-weight: 950;
+}
+
+.unsaved-alert span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+@media (max-width: 700px) {
+  .unsaved-alert {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
