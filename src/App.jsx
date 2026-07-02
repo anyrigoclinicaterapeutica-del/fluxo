@@ -207,6 +207,9 @@ function removeIdea(index) {
 <button className={page === 'ideias' ? 'active' : ''} onClick={() => setPage('ideias')}>
   💡 Banco de Ideias
 </button>
+<button className={page === 'relatorios' ? 'active' : ''} onClick={() => setPage('relatorios')}>
+  📈 Relatórios
+</button>
         <button className={page === 'planner' ? 'active' : ''} onClick={() => setPage('planner')}>
           🗓️ Planner
         </button>
@@ -240,7 +243,7 @@ function removeIdea(index) {
         {page === 'youtube' && <YouTube data={data} />}
         {page === 'whatsapp' && <WhatsApp data={data} />}
         {page === 'ideias' && <BancoIdeias data={data} />}
-
+{page === 'relatorios' && <Relatorios data={data} />}
         {page === 'admin' && !adminUnlocked && (
           <AdminLogin
             password={adminPassword}
@@ -427,6 +430,71 @@ function WhatsApp({ data }) {
           meta={`Meta: ${data.whatsapp.meta}`}
           percent={progressoConversoes}
         />
+      </section>
+    </>
+  )
+}function Relatorios({ data }) {
+  const progressoInstagram = calcularProgresso(data.instagram.seguidores, data.instagram.meta)
+  const progressoTikTok = calcularProgresso(data.tiktok.visualizacoes, data.tiktok.meta)
+  const progressoYouTube = calcularProgresso(data.youtube.inscritos, data.youtube.meta)
+  const progressoWhatsApp = calcularProgresso(data.whatsapp.conversoes, data.whatsapp.meta)
+
+  const planner = data?.planner || []
+  const ideias = data?.ideias || []
+
+  const pendentes = planner.filter(item => item.status === 'Pendente').length
+  const andamento = planner.filter(item => item.status === 'Em andamento').length
+  const concluidas = planner.filter(item => item.status === 'Concluído').length
+
+  return (
+    <>
+      <PageHeader
+        title="Relatórios"
+        subtitle="Resumo geral das metas, tarefas e ideias do Fluxo"
+      />
+
+      <section className="report-grid">
+        <div className="report-card">
+          <span>Melhor progresso</span>
+          <strong>{Math.max(progressoInstagram, progressoTikTok, progressoYouTube, progressoWhatsApp)}%</strong>
+          <p>Maior avanço atual entre os canais</p>
+        </div>
+
+        <div className="report-card">
+          <span>Total de tarefas</span>
+          <strong>{planner.length}</strong>
+          <p>{pendentes} pendentes · {andamento} em andamento · {concluidas} concluídas</p>
+        </div>
+
+        <div className="report-card">
+          <span>Ideias cadastradas</span>
+          <strong>{ideias.length}</strong>
+          <p>Banco de ideias ativo para campanhas e conteúdos</p>
+        </div>
+      </section>
+
+      <section className="report-table">
+        <h2>Desempenho por canal</h2>
+
+        <div className="report-row">
+          <span>Instagram</span>
+          <strong>{progressoInstagram}%</strong>
+        </div>
+
+        <div className="report-row">
+          <span>TikTok</span>
+          <strong>{progressoTikTok}%</strong>
+        </div>
+
+        <div className="report-row">
+          <span>YouTube</span>
+          <strong>{progressoYouTube}%</strong>
+        </div>
+
+        <div className="report-row">
+          <span>WhatsApp</span>
+          <strong>{progressoWhatsApp}%</strong>
+        </div>
       </section>
     </>
   )
