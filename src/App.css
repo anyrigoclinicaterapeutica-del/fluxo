@@ -2100,4 +2100,24 @@ body {
   background: rgba(255, 255, 255, 0.12);
   color: var(--ink);
   font-size: 12px;
+}/* Botão salvar fixo no Admin */
+
+.admin:not(.login-box) > .save {
+  position: sticky;
+  bottom: 18px;
+  z-index: 30;
+  width: 100%;
+  margin-top: 24px;
+  padding: 18px 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899, #fb7185);
+  color: white;
+  font-size: 16px;
+  font-weight: 950;
+  box-shadow: 0 24px 70px -28px rgba(236, 72, 153, 0.85);
+}
+
+.admin:not(.login-box) > .save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 30px 90px -32px rgba(236, 72, 153, 1);
 }
